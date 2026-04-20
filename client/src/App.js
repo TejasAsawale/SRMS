@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom
 import Dashboard from './pages/dashboard/Dashboard';
 import AdminDashboard from './pages/dashboard/AdminDashboard';
 import StudentDashboard from './pages/dashboard/StudentDashboard';
+import LandingPage from './pages/LandingPage';
 
 // Protected route wrapper
 const ProtectedRoute = ({ allowed, redirectTo = "/" }) => {
@@ -49,14 +50,17 @@ function App() {
         <BrowserRouter>
             <Routes>
                 {/* Public route */}
-                <Route
-                    path="/"
-                    element={
-                        isAdmin ? <Navigate to="/admin-dashboard" replace /> :
+                <Route path="/" element={
+                    isAdmin ? <Navigate to="/admin-dashboard" replace /> :
                         isStudent ? <Navigate to="/student-dashboard" replace /> :
-                        <Dashboard onLogin={handleLogin} />
-                    }
-                />
+                            <LandingPage />
+                } />
+
+                <Route path="/login" element={
+                    isAdmin ? <Navigate to="/admin-dashboard" replace /> :
+                        isStudent ? <Navigate to="/student-dashboard" replace /> :
+                            <Dashboard onLogin={handleLogin} />
+                } />
 
                 {/* Admin protected routes */}
                 <Route element={<ProtectedRoute allowed={isAdmin} />}>

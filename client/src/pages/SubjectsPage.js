@@ -10,15 +10,22 @@ const CLASSES = [
 ];
 
 const SubjectsPage = () => {
-    const [subjects, setSubjects] = useState([]);
-    const [students, setStudents] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
+    const [subjects, setSubjects]   = useState([]);
+    const [students, setStudents]   = useState([]);
+    const [loading, setLoading]     = useState(true);
+    const [error, setError]         = useState("");
 
-    // Modal state
-    const [modalOpen, setModalOpen] = useState(false);
-    const [modalClass, setModalClass] = useState("");
-    const [editData, setEditData] = useState(null);
+    // Class subject modal
+    const [classModal, setClassModal]   = useState(false);
+    const [classModalData, setClassModalData] = useState(null); // { classId, editSubject }
+
+    // Student subject modal
+    const [studentModal, setStudentModal]     = useState(false);
+    const [studentModalData, setStudentModalData] = useState(null); // student object
+
+    // Student table filter
+    const [selectedClass, setSelectedClass] = useState("All");
+    const [search, setSearch]               = useState("");
 
     const fetchData = async () => {
         try {
@@ -31,7 +38,6 @@ const SubjectsPage = () => {
             setStudents(studRes.data);
             setError("");
         } catch (err) {
-            console.error("Fetch error:", err);
             setError("Failed to fetch data. Check if server is running.");
         } finally {
             setLoading(false);
@@ -40,295 +46,504 @@ const SubjectsPage = () => {
 
     useEffect(() => { fetchData(); }, []);
 
-    const handleDeleteSubject = async (id) => {
-        if (!window.confirm("Delete this subject permanently?")) return;
-        try {
-            await axios.delete(`${API}/subjects/delete/${id}`);
-            fetchData();
-        } catch (err) {
-            alert(err.response?.data?.message || "Delete failed");
-        }
+    // ── Class card actions ──
+    const openClassModal = (classId, editSubject = null) => {
+        setClassModalData({ classId, editSubject });
+        setClassModal(true);
     };
 
-    const openAddModal = (classId) => {
-        setEditData(null);
-        setModalClass(classId);
-        setModalOpen(true);
+    const closeClassModal = () => {
+        setClassModal(false);
+        setClassModalData(null);
     };
 
-    const openEditModal = (subject) => {
-        setEditData(subject);
-        setModalClass(subject.ClassId);
-        setModalOpen(true);
+    // const handleDeleteSubject = async (id) => {
+    //     if (!window.confirm("Delete this subject permanently?")) return;
+    //     try {
+    //         await axios.delete(`${API}/subjects/delete/${id}`);
+    //         fetchData();
+    //     } catch (err) {
+    //         alert(err.response?.data?.message || "Delete failed");
+    //     }
+    // }; 
+
+    // ── Student subject actions ──
+    const openStudentModal = (student) => {
+        setStudentModalData(student);
+        setStudentModal(true);
     };
 
-    const closeModal = () => {
-        setModalOpen(false);
-        setEditData(null);
-        setModalClass("");
+    const closeStudentModal = () => {
+        setStudentModal(false);
+        setStudentModalData(null);
     };
 
-    const handleModalSuccess = () => {
-        closeModal();
-        fetchData();
-    };
+    // ── Derived data ──
+    const getClassSubjects = (classId) => subjects.filter(s => s.ClassId === classId);
 
-    // Group subjects by class
-    const subjectsByClass = CLASSES.reduce((acc, cls) => {
-        const classSubjects = subjects.filter(s => s.ClassId === cls);
-        const classStudents = students.filter(s => s.ClassId === cls);
-        if (classSubjects.length > 0 || classStudents.length > 0) {
-            acc[cls] = { subjects: classSubjects, students: classStudents };
-        }
-        return acc;
-    }, {});
+    const filteredStudents = students.filter(s => {
+        const matchClass = selectedClass === "All" || s.ClassId === selectedClass;
+        const matchSearch =
+            s.StudentName?.toLowerCase().includes(search.toLowerCase()) ||
+            s.RollId?.toLowerCase().includes(search.toLowerCase()) ||
+            s.StudentEmail?.toLowerCase().includes(search.toLowerCase());
+        return matchClass && matchSearch;
+    });
 
-    const activeClasses = Object.keys(subjectsByClass);
+    const getAvatar = (name) =>
+        name ? name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2) : "??";
 
     return (
         <div className="results-container">
             <div className="content-header">
                 <h1>Subjects Management</h1>
-                <p>Manage subjects and students for each class.</p>
+                <p>Manage class subjects and student subject assignments.</p>
             </div>
 
             {error && <div className="alert alert-error">⚠ {error}</div>}
 
-            {/* ── Quick Add buttons for all classes ── */}
+            {/* ── 12 Class Cards ── */}
             <div className="section-card" style={{ marginBottom: "24px" }}>
-                <div className="section-header">
-                    <h3 className="section-title">Add Subject to a Class</h3>
+                <div className="section-header" style={{ marginBottom: "16px" }}>
+                    <h3 className="section-title">Class Subjects</h3>
+                    <p className="section-meta">Click Edit to manage subjects for each class</p>
                 </div>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", padding: "12px 0" }}>
-                    {CLASSES.map(cls => (
-                        <button
+
+                {/* Row 1: Class 1-6 */}
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: "12px", marginBottom: "12px" }}>
+                    {CLASSES.slice(0, 6).map(cls => (
+                        <ClassCard
                             key={cls}
-                            className="btn btn-sm"
-                            onClick={() => openAddModal(cls)}
-                        >
-                            + {cls}
-                        </button>
+                            cls={cls}
+                            subjects={getClassSubjects(cls)}
+                            onEdit={() => openClassModal(cls)}
+                        />
+                    ))}
+                </div>
+
+                {/* Row 2: Class 7-12 */}
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: "12px" }}>
+                    {CLASSES.slice(6, 12).map(cls => (
+                        <ClassCard
+                            key={cls}
+                            cls={cls}
+                            subjects={getClassSubjects(cls)}
+                            onEdit={() => openClassModal(cls)}
+                        />
                     ))}
                 </div>
             </div>
 
-            {/* ── Class Cards ── */}
-            {loading ? (
-                <div className="section-card">
-                    <p className="table-status-msg">Loading...</p>
+            {/* ── Students Table ── */}
+            <div className="section-card">
+                <div className="section-header">
+                    <h3 className="section-title">Students & Subject Assignment</h3>
+                    <p className="section-meta">{filteredStudents.length} student{filteredStudents.length !== 1 ? "s" : ""} shown</p>
                 </div>
-            ) : activeClasses.length === 0 ? (
-                <div className="section-card">
-                    <p className="table-status-msg">No subjects added yet. Use the buttons above to get started.</p>
+
+                <div className="filter-bar">
+                    <input
+                        type="text"
+                        placeholder="Search by name, roll id, or email..."
+                        value={search}
+                        onChange={e => setSearch(e.target.value)}
+                    />
+                    <select
+                        value={selectedClass}
+                        onChange={e => setSelectedClass(e.target.value)}
+                    >
+                        <option value="All">All Classes</option>
+                        {CLASSES.map(c => (
+                            <option key={c} value={c}>{c}</option>
+                        ))}
+                    </select>
+                    {search && (
+                        <button className="btn btn-sm" onClick={() => setSearch("")}>Clear</button>
+                    )}
                 </div>
-            ) : (
-                activeClasses.map(cls => {
-                    const { subjects: clsSubjects, students: clsStudents } = subjectsByClass[cls];
-                    return (
-                        <div key={cls} className="section-card" style={{ marginBottom: "24px" }}>
-                            {/* Card Header */}
-                            <div className="section-header">
-                                <div>
-                                    <h3 className="section-title">{cls}</h3>
-                                    <p className="section-meta">
-                                        {clsSubjects.length} subject{clsSubjects.length !== 1 ? "s" : ""} &nbsp;·&nbsp;
-                                        {clsStudents.length} student{clsStudents.length !== 1 ? "s" : ""}
-                                    </p>
-                                </div>
-                                <button
-                                    className="btn btn-primary btn-sm"
-                                    onClick={() => openAddModal(cls)}
-                                >
-                                    + Add Subject
-                                </button>
-                            </div>
 
-                            {/* Subjects Table */}
-                            <div style={{ marginBottom: "16px" }}>
-                                <p style={{ fontSize: "12px", fontWeight: 600, color: "#888", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.05em" }}>Subjects</p>
-                                <div className="table-wrapper">
-                                    <table className="data-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Subject Name</th>
-                                                <th>Subject Code</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {clsSubjects.length > 0 ? (
-                                                clsSubjects.map(s => (
-                                                    <tr key={s._id}>
-                                                        <td><strong>{s.SubjectName}</strong></td>
-                                                        <td>{s.SubjectCode}</td>
-                                                        <td>
-                                                            <div className="action-btns">
-                                                                <button className="btn btn-sm" onClick={() => openEditModal(s)}>Edit</button>
-                                                                <button className="btn btn-sm btn-danger" onClick={() => handleDeleteSubject(s._id)}>Delete</button>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                ))
-                                            ) : (
-                                                <tr><td colSpan="3" className="table-status-msg">No subjects added yet.</td></tr>
-                                            )}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-                            {/* Students in this class */}
-                            {clsStudents.length > 0 && (
-                                <div>
-                                    <p style={{ fontSize: "12px", fontWeight: 600, color: "#888", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.05em" }}>Enrolled Students</p>
-                                    <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-                                        {clsStudents.map(s => (
-                                            <div key={s._id} style={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                gap: "8px",
-                                                padding: "6px 12px",
-                                                background: "var(--bg-secondary, #f5f5f5)",
-                                                borderRadius: "20px",
-                                                fontSize: "13px"
-                                            }}>
-                                                <div className="avatar av-blue" style={{ width: "24px", height: "24px", fontSize: "10px" }}>
-                                                    {s.StudentName?.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2)}
+                <div className="table-wrapper">
+                    <table className="data-table">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Roll ID</th>
+                                <th>Class</th>
+                                <th>Subjects Assigned</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {loading ? (
+                                <tr><td colSpan="5" className="table-status-msg">Loading...</td></tr>
+                            ) : filteredStudents.length > 0 ? (
+                                filteredStudents.map(s => {
+                                    const classSubjects = getClassSubjects(s.ClassId);
+                                    const assignedSubjects = s.Subjects || [];
+                                    return (
+                                        <tr key={s._id}>
+                                            <td>
+                                                <div className="student-cell">
+                                                    <div className="avatar av-blue">{getAvatar(s.StudentName)}</div>
+                                                    <div>
+                                                        <div className="student-name">{s.StudentName}</div>
+                                                        <div className="student-id">{s.StudentEmail}</div>
+                                                    </div>
                                                 </div>
-                                                <span>{s.StudentName}</span>
-                                                <span style={{ color: "#888", fontSize: "11px" }}>{s.RollId}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
+                                            </td>
+                                            <td>{s.RollId}</td>
+                                            <td>{s.ClassId || "—"}</td>
+                                            <td>
+                                                {assignedSubjects.length > 0 ? (
+                                                    <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
+                                                        {assignedSubjects.map(code => {
+                                                            const sub = subjects.find(su => su.SubjectCode === code);
+                                                            return (
+                                                                <span key={code} style={{
+                                                                    padding: "2px 8px",
+                                                                    background: "var(--accent-light, #e8f4ff)",
+                                                                    borderRadius: "12px",
+                                                                    fontSize: "11px",
+                                                                    color: "var(--accent, #2563eb)"
+                                                                }}>
+                                                                    {sub ? sub.SubjectName : code}
+                                                                </span>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                ) : (
+                                                    <span style={{ color: "#aaa", fontSize: "12px" }}>
+                                                        {classSubjects.length === 0
+                                                            ? "No subjects in this class"
+                                                            : "None assigned"}
+                                                    </span>
+                                                )}
+                                            </td>
+                                            <td>
+                                                <button
+                                                    className="btn btn-sm"
+                                                    onClick={() => openStudentModal(s)}
+                                                    disabled={classSubjects.length === 0}
+                                                    title={classSubjects.length === 0 ? "Add subjects to this class first" : "Edit subjects"}
+                                                >
+                                                    Edit Subjects
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    );
+                                })
+                            ) : (
+                                <tr><td colSpan="5" className="table-status-msg">No students found.</td></tr>
                             )}
-                        </div>
-                    );
-                })
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            {/* ── Class Subject Modal ── */}
+            {classModal && classModalData && (
+                <Modal title={`Manage Subjects — ${classModalData.classId}`} onClose={closeClassModal}>
+                    <ClassSubjectManager
+                        classId={classModalData.classId}
+                        subjects={getClassSubjects(classModalData.classId)}
+                        onSuccess={() => { fetchData(); }}
+                        onClose={closeClassModal}
+                    />
+                </Modal>
             )}
 
-            {/* ── Add/Edit Modal ── */}
-            {modalOpen && (
-                <div style={{
-                    position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
-                    background: "rgba(0,0,0,0.5)", zIndex: 1000,
-                    display: "flex", alignItems: "center", justifyContent: "center"
-                }}>
-                    <div style={{
-                        background: "var(--bg-primary, #fff)",
-                        borderRadius: "12px", padding: "32px",
-                        width: "100%", maxWidth: "480px",
-                        boxShadow: "0 20px 60px rgba(0,0,0,0.3)"
-                    }}>
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
-                            <h3 style={{ margin: 0 }}>
-                                {editData ? `Edit Subject — ${modalClass}` : `Add Subject — ${modalClass}`}
-                            </h3>
-                            <button className="btn btn-sm" onClick={closeModal}>✕</button>
-                        </div>
-
-                        <SubjectForm
-                            editData={editData}
-                            classId={modalClass}
-                            onSuccess={handleModalSuccess}
-                            onCancel={closeModal}
-                        />
-                    </div>
-                </div>
+            {/* ── Student Subject Modal ── */}
+            {studentModal && studentModalData && (
+                <Modal title={`Edit Subjects — ${studentModalData.StudentName}`} onClose={closeStudentModal}>
+                    <StudentSubjectManager
+                        student={studentModalData}
+                        classSubjects={getClassSubjects(studentModalData.ClassId)}
+                        onSuccess={() => { fetchData(); closeStudentModal(); }}
+                        onCancel={closeStudentModal}
+                    />
+                </Modal>
             )}
         </div>
     );
 };
 
-// ─── Subject Form (used inside modal) ────────────────────────────────────────
-const SubjectForm = ({ editData, classId, onSuccess, onCancel }) => {
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
-    const [formData, setFormData] = useState({
-        SubjectName: "",
-        SubjectCode: "",
-        ClassId: classId
-    });
+// ─── Class Card ───────────────────────────────────────────────────────────────
+const ClassCard = ({ cls, subjects, onEdit }) => (
+    <div style={{
+        border: "1px solid var(--border, #e5e7eb)",
+        borderRadius: "10px",
+        padding: "14px",
+        display: "flex",
+        flexDirection: "column",
+        gap: "8px",
+        background: "var(--bg-primary, #fff)"
+    }}>
+        <div style={{ fontWeight: 700, fontSize: "13px" }}>{cls}</div>
+        <div style={{ fontSize: "12px", color: "#888" }}>
+            {subjects.length} subject{subjects.length !== 1 ? "s" : ""}
+        </div>
+        <button className="btn btn-sm" style={{ width: "100%", marginTop: "4px" }} onClick={onEdit}>
+            Edit
+        </button>
+    </div>
+);
 
-    useEffect(() => {
-        if (editData) {
-            setFormData({
-                SubjectName: editData.SubjectName,
-                SubjectCode: editData.SubjectCode,
-                ClassId: editData.ClassId
-            });
-        } else {
-            setFormData({ SubjectName: "", SubjectCode: "", ClassId: classId });
+// ─── Modal Wrapper ────────────────────────────────────────────────────────────
+const Modal = ({ title, onClose, children }) => (
+    <div style={{
+        position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+        background: "rgba(0,0,0,0.5)", zIndex: 1000,
+        display: "flex", alignItems: "center", justifyContent: "center"
+    }}>
+        <div style={{
+            background: "var(--bg-primary, #fff)",
+            borderRadius: "12px", padding: "32px",
+            width: "100%", maxWidth: "520px",
+            maxHeight: "85vh", overflowY: "auto",
+            boxShadow: "0 20px 60px rgba(0,0,0,0.3)"
+        }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
+                <h3 style={{ margin: 0, fontSize: "16px" }}>{title}</h3>
+                <button className="btn btn-sm" onClick={onClose}>✕</button>
+            </div>
+            {children}
+        </div>
+    </div>
+);
+
+// ─── Class Subject Manager (inside modal) ─────────────────────────────────────
+const ClassSubjectManager = ({ classId, subjects, onSuccess, onClose }) => {
+    const [showForm, setShowForm]   = useState(false);
+    const [editSubject, setEditSubject] = useState(null);
+    const [formData, setFormData]   = useState({ SubjectName: "", SubjectCode: "" });
+    const [loading, setLoading]     = useState(false);
+    const [error, setError]         = useState("");
+
+    const handleEdit = (subject) => {
+        setEditSubject(subject);
+        setFormData({ SubjectName: subject.SubjectName, SubjectCode: subject.SubjectCode });
+        setShowForm(true);
+    };
+
+    const handleAdd = () => {
+        setEditSubject(null);
+        setFormData({ SubjectName: "", SubjectCode: "" });
+        setShowForm(true);
+    };
+
+    const handleDelete = async (id) => {
+        if (!window.confirm("Delete this subject?")) return;
+        try {
+            await axios.delete(`${API}/subjects/delete/${id}`);
+            onSuccess();
+        } catch (err) {
+            alert(err.response?.data?.message || "Delete failed");
         }
-    }, [editData, classId]);
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
-
         if (!formData.SubjectName.trim() || !formData.SubjectCode.trim()) {
             setError("All fields are required.");
             return;
         }
-
         setLoading(true);
         try {
-            if (editData) {
-                await axios.put(`${API}/subjects/update/${editData._id}`, {
-                    SubjectName: formData.SubjectName
-                });
+            if (editSubject) {
+                await axios.put(`${API}/subjects/update/${editSubject._id}`, { SubjectName: formData.SubjectName });
             } else {
-                await axios.post(`${API}/subjects/add`, formData);
+                await axios.post(`${API}/subjects/add`, { ...formData, ClassId: classId });
             }
             onSuccess();
+            setShowForm(false);
+            setFormData({ SubjectName: "", SubjectCode: "" });
+            setEditSubject(null);
         } catch (err) {
-            const msg = err.response?.data?.message || "Operation failed.";
-            setError(msg);
+            setError(err.response?.data?.message || "Operation failed.");
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            {error && <div className="alert alert-error" style={{ marginBottom: "16px" }}>⚠ {error}</div>}
+        <div>
+            {/* Existing subjects list */}
+            {subjects.length > 0 ? (
+                <div style={{ marginBottom: "16px" }}>
+                    {subjects.map(s => (
+                        <div key={s._id} style={{
+                            display: "flex", justifyContent: "space-between",
+                            alignItems: "center", padding: "10px 12px",
+                            border: "1px solid var(--border, #e5e7eb)",
+                            borderRadius: "8px", marginBottom: "8px"
+                        }}>
+                            <div>
+                                <div style={{ fontWeight: 600, fontSize: "14px" }}>{s.SubjectName}</div>
+                                <div style={{ fontSize: "12px", color: "#888" }}>{s.SubjectCode}</div>
+                            </div>
+                            <div className="action-btns">
+                                <button className="btn btn-sm" onClick={() => handleEdit(s)}>Edit</button>
+                                <button className="btn btn-sm btn-danger" onClick={() => handleDelete(s._id)}>Delete</button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            ) : (
+                <p style={{ color: "#aaa", fontSize: "13px", marginBottom: "16px" }}>No subjects added yet.</p>
+            )}
 
-            <div className="form-group" style={{ marginBottom: "16px" }}>
-                <label>Class</label>
-                <input type="text" value={classId} disabled style={{ background: "#f5f5f5" }} />
+            {/* Add/Edit form */}
+            {showForm ? (
+                <form onSubmit={handleSubmit}>
+                    {error && <div className="alert alert-error" style={{ marginBottom: "12px" }}>⚠ {error}</div>}
+                    <div className="form-group" style={{ marginBottom: "12px" }}>
+                        <label>Subject Name</label>
+                        <input
+                            type="text"
+                            placeholder="e.g. Mathematics"
+                            value={formData.SubjectName}
+                            onChange={e => setFormData({ ...formData, SubjectName: e.target.value })}
+                            required autoFocus
+                        />
+                    </div>
+                    <div className="form-group" style={{ marginBottom: "16px" }}>
+                        <label>Subject Code</label>
+                        <input
+                            type="text"
+                            placeholder="e.g. MATH-10"
+                            value={formData.SubjectCode}
+                            disabled={!!editSubject}
+                            onChange={e => setFormData({ ...formData, SubjectCode: e.target.value })}
+                            required
+                        />
+                    </div>
+                    <div className="form-actions">
+                        <button type="button" className="btn" onClick={() => setShowForm(false)}>Cancel</button>
+                        <button type="submit" className="btn btn-primary" disabled={loading}>
+                            {loading ? "Saving..." : editSubject ? "Update" : "Add Subject"}
+                        </button>
+                    </div>
+                </form>
+            ) : (
+                <button className="btn btn-primary" style={{ width: "100%" }} onClick={handleAdd}>
+                    + Add New Subject
+                </button>
+            )}
+        </div>
+    );
+};
+
+// ─── Student Subject Manager (inside modal) ───────────────────────────────────
+const StudentSubjectManager = ({ student, classSubjects, onSuccess, onCancel }) => {
+    const [selected, setSelected]       = useState(student.Subjects || []);
+    const [customCode, setCustomCode]   = useState("");
+    const [loading, setLoading]         = useState(false);
+    const [error, setError]             = useState("");
+    const [addingCustom, setAddingCustom] = useState(false);
+
+    const toggleSubject = (code) => {
+        setSelected(prev =>
+            prev.includes(code) ? prev.filter(c => c !== code) : [...prev, code]
+        );
+    };
+
+    const handleAddCustom = () => {
+        if (!customCode.trim()) {
+            setError("Subject code is required.");
+            return;
+        }
+        if (selected.includes(customCode.trim())) {
+            setError("Subject already added.");
+            return;
+        }
+        setSelected(prev => [...prev, customCode.trim()]);
+        setCustomCode("");
+        setAddingCustom(false);
+        setError("");
+    };
+
+    const handleSave = async () => {
+        setError("");
+        setLoading(true);
+        try {
+            await axios.put(`${API}/students/updateSubjects/${student._id}`, {
+                Subjects: selected
+            });
+            onSuccess();
+        } catch (err) {
+            setError(err.response?.data?.message || "Failed to update subjects.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div>
+            <p style={{ fontSize: "13px", color: "#666", marginBottom: "16px" }}>
+                Class: <strong>{student.ClassId}</strong> — select subjects from the list below.
+            </p>
+
+            {error && <div className="alert alert-error" style={{ marginBottom: "12px" }}>⚠ {error}</div>}
+
+            {/* Class subjects as checkboxes */}
+            <div style={{ marginBottom: "16px" }}>
+                {classSubjects.map(s => (
+                    <label key={s._id} style={{
+                        display: "flex", alignItems: "center", gap: "10px",
+                        padding: "10px 12px", marginBottom: "8px",
+                        border: `1px solid ${selected.includes(s.SubjectCode) ? "var(--accent, #2563eb)" : "var(--border, #e5e7eb)"}`,
+                        borderRadius: "8px", cursor: "pointer",
+                        background: selected.includes(s.SubjectCode) ? "var(--accent-light, #eff6ff)" : "transparent"
+                    }}>
+                        <input
+                            type="checkbox"
+                            checked={selected.includes(s.SubjectCode)}
+                            onChange={() => toggleSubject(s.SubjectCode)}
+                        />
+                        <div>
+                            <div style={{ fontWeight: 600, fontSize: "14px" }}>{s.SubjectName}</div>
+                            <div style={{ fontSize: "12px", color: "#888" }}>{s.SubjectCode}</div>
+                        </div>
+                    </label>
+                ))}
             </div>
 
-            <div className="form-group" style={{ marginBottom: "16px" }}>
-                <label>Subject Name</label>
-                <input
-                    type="text"
-                    placeholder="e.g. Mathematics Part 1"
-                    value={formData.SubjectName}
-                    onChange={e => setFormData({ ...formData, SubjectName: e.target.value })}
-                    required
-                    autoFocus
-                />
-            </div>
-
-            <div className="form-group" style={{ marginBottom: "24px" }}>
-                <label>Subject Code</label>
-                <input
-                    type="text"
-                    placeholder="e.g. MATH-10-1"
-                    value={formData.SubjectCode}
-                    disabled={!!editData}
-                    onChange={e => setFormData({ ...formData, SubjectCode: e.target.value })}
-                    required
-                />
-            </div>
+            {/* Custom subject option */}
+            {addingCustom ? (
+                <div style={{ border: "1px dashed #ccc", borderRadius: "8px", padding: "12px", marginBottom: "16px" }}>
+                    <div className="form-group" style={{ marginBottom: "8px" }}>
+                        <label>Subject Code</label>
+                        <input
+                            type="text"
+                            placeholder="e.g. EXTRA-101"
+                            value={customCode}
+                            onChange={e => setCustomCode(e.target.value)}
+                            autoFocus
+                        />
+                    </div>
+                    <div className="form-actions">
+                        <button className="btn btn-sm" onClick={() => setAddingCustom(false)}>Cancel</button>
+                        <button className="btn btn-sm btn-primary" onClick={handleAddCustom}>Add</button>
+                    </div>
+                </div>
+            ) : (
+                <button
+                    className="btn btn-sm"
+                    style={{ width: "100%", marginBottom: "16px" }}
+                    onClick={() => setAddingCustom(true)}
+                >
+                    + Add Custom Subject
+                </button>
+            )}
 
             <div className="form-actions">
-                <button type="button" className="btn" onClick={onCancel}>Cancel</button>
-                <button type="submit" className="btn btn-primary" disabled={loading}>
-                    {loading ? "Processing..." : editData ? "Update Subject" : "Add Subject"}
+                <button className="btn" onClick={onCancel}>Cancel</button>
+                <button className="btn btn-primary" onClick={handleSave} disabled={loading}>
+                    {loading ? "Saving..." : "Save Subjects"}
                 </button>
             </div>
-        </form>
+        </div>
     );
 };
 

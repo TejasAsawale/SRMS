@@ -91,40 +91,6 @@ const getStudents = async (req, res) => {
     }
 };
 
-
-
-// UPDATE Student
-// const updateStudent = async (req, res) => {
-//     try {
-//         const { id } = req.params;
-//         const updates = req.body;
-
-//         // If the admin is updating the password, we must re-hash it
-//         if (updates.Password) {
-//             const salt = await bcrypt.genSalt(10);
-//             updates.Password = await bcrypt.hash(updates.Password, salt);
-//         }
-
-//         const updatedStudent = await Student.findByIdAndUpdate(
-//             id, 
-//             { $set: updates }, 
-//             { new: true, runValidators: true }
-//         );
-
-//         if (!updatedStudent) {
-//             return res.status(404).json({ success: false, message: "Student not found" });
-//         }
-
-//         res.status(200).json({ 
-//             success: true, 
-//             message: "Student updated successfully", 
-//             data: updatedStudent 
-//         });
-//     } catch (error) {
-//         res.status(500).json({ success: false, message: "Update Error", error: error.message });
-//     }
-// }; 
-
 // UPDATE Student
 const updateStudent = async (req, res) => {
     try {
@@ -175,4 +141,30 @@ const deleteStudent = async (req, res) => {
     }
 };
 
-module.exports = { addStudent, getStudents, loginStudent, updateStudent, deleteStudent };
+// UPDATE Subject
+const updateSubjects = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { Subjects } = req.body;
+
+        if (!Array.isArray(Subjects)) {
+            return res.status(400).json({ success: false, message: "Subjects must be an array" });
+        }
+
+        const updated = await Student.findByIdAndUpdate(
+            id,
+            { $set: { Subjects } },
+            { new: true }
+        );
+
+        if (!updated) {
+            return res.status(404).json({ success: false, message: "Student not found" });
+        }
+
+        res.status(200).json({ success: true, message: "Subjects updated", data: updated });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Update Error", error: error.message });
+    }
+};
+
+module.exports = { addStudent, getStudents, loginStudent, updateStudent, deleteStudent, updateSubjects };
