@@ -44,39 +44,56 @@ const addStudent = async (req, res) => {
 const loginStudent = async (req, res) => {
     try {
         const { email, password } = req.body;
-        
-        // 1. Find student by email
-        const student = await Student.findOne({ StudentEmail: email });
 
+        // 1. Check Admin first
+        if (email === process.env.REACT_APP_ADMIN_EMAIL &&
+            password === process.env.REACT_APP_ADMIN_PASSWORD) {
+            const token = jwt.sign(
+                { role: 'admin' },
+                process.env.JWT_SECRET || 'your_secret_key_here',
+                { expiresIn: '24h' }
+            );
+            return res.status(200).json({
+                success: true,
+                message: "Admin Login Successful",
+                token: token,
+                role: 'admin',
+                student: { name: "System Admin", email: email }
+            });
+        }
+
+        // 2. Find student
+        const student = await Student.findOne({ StudentEmail: email });
         if (!student) {
             return res.status(400).json({ success: false, message: "Student not found" });
         }
 
-        // 2. Check password
+        // 3. Check password
         const isMatch = await bcrypt.compare(password, student.Password);
         if (!isMatch) {
             return res.status(400).json({ success: false, message: "Invalid credentials" });
         }
 
-        // 3. Generate JWT Token
-        // This token contains the student's ID and will expire in 24 hours
+        // 4. Generate token
         const token = jwt.sign(
             { id: student._id, role: 'student' },
-            process.env.JWT_SECRET || 'your_secret_key_here', 
+            process.env.JWT_SECRET || 'your_secret_key_here',
             { expiresIn: '24h' }
         );
 
-        // 4. Send response with Token
-        res.status(200).json({ 
-            success: true, 
+        // 5. Send response
+        res.status(200).json({
+            success: true,
             message: "Login successful",
-            token: token, // Send this to frontend
+            token: token,
+            role: 'student',
             student: {
                 name: student.StudentName,
                 email: student.StudentEmail,
                 rollId: student.RollId
             }
         });
+
     } catch (error) {
         res.status(500).json({ success: false, message: "Login Error", error: error.message });
     }

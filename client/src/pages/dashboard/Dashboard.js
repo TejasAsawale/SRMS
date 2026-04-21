@@ -37,36 +37,38 @@ const Dashboard = ({ onLogin }) => {
                     Gender: 'Other',
                     DOB: '2000-01-01',
                     ClassId: 'General',
+                    // Random Roll ID generation
                     RollId: "S" + Math.floor(1000 + Math.random() * 9000)
                 };
+
                 const result = await registerStudent(studentData);
                 if (result.success) {
-                    setSuccess('Registration successful! You can now sign in.');
+                    setSuccess('Registration successful! Please sign in.');
                     setIsSignup(false);
                     setFormData({ fullName: '', email: '', password: '' });
                 }
             } else {
-                // --- LOGIN LOGIC ---
-                
-                // 1. Check for Admin first (Static check from .env)
-                if (formData.email === process.env.REACT_APP_ADMIN_EMAIL && 
-                    formData.password === process.env.REACT_APP_ADMIN_PASSWORD) {
-                    onLogin(formData.email, 'admin'); 
-                    navigate('/admin-dashboard');
-                    return;
-                }
+    // --- LOGIN LOGIC ---
 
-                // 2. Check for Student via Backend
-                const loginResult = await loginStudent(formData.email, formData.password);
-                if (loginResult.success) {
-                    // We ensure a role string is passed to App.js
-                    const userRole = loginResult.role || 'student'; 
-                    onLogin(formData.email, userRole);
-                    navigate(userRole === 'admin' ? '/admin-dashboard' : '/student-dashboard');
-                }
-            }
+    // 1. Check Admin first (static .env check)
+    if (formData.email === process.env.REACT_APP_ADMIN_EMAIL &&
+        formData.password === process.env.REACT_APP_ADMIN_PASSWORD) {
+        onLogin(formData.email, 'admin');
+        navigate('/admin-dashboard');
+        return;
+    }
+
+    // 2. Student login via backend
+    const loginResult = await loginStudent(formData.email, formData.password);
+    if (loginResult.success) {
+        const userRole = loginResult.role || 'student';
+        onLogin(formData.email, userRole);
+        navigate(userRole === 'admin' ? '/admin-dashboard' : '/student-dashboard');
+    }
+}
         } catch (err) {
-            const msg = err.response?.data?.message || err.message || 'Connection failed. Try again.';
+            // Extracts error message from backend or uses fallback
+            const msg = err.message || 'Connection failed. Try again.';
             setError(msg);
         } finally {
             setLoading(false);
@@ -82,6 +84,11 @@ const Dashboard = ({ onLogin }) => {
 
     return (
         <div className="login-page-wrapper">
+            {/* Added Back Button for UX */}
+            <button className="back-home-btn" onClick={() => navigate('/')}>
+                ← Back to Home
+            </button>
+
             <div className="login-brand">
                 <div className="brand-mark">S</div>
                 <div>
@@ -117,7 +124,7 @@ const Dashboard = ({ onLogin }) => {
                                 id="fullName"
                                 type="text"
                                 name="fullName"
-                                placeholder="e.g. Anjali Rao"
+                                placeholder="e.g. Tejas Asawale"
                                 value={formData.fullName}
                                 onChange={handleChange}
                                 required
