@@ -5,6 +5,7 @@ const { connectdb } = require('./config/db');
 const studentRoutes = require('./routes/studentRoutes');
 const subjectRoutes = require('./routes/subjectRoutes');
 const resultRoutes = require('./routes/resultRoutes');
+const classRoutes = require('./routes/classRoutes');
 
 dotenv.config();
 const app = express();
@@ -29,6 +30,7 @@ app.get('/', (req, res) => {
 app.use('/api/students', studentRoutes);
 app.use('/api/subjects', subjectRoutes);
 app.use('/api/results', resultRoutes);
+app.use('/api/classes', classRoutes);
 
 // 6. Server Port
 const PORT = process.env.PORT || 5003;

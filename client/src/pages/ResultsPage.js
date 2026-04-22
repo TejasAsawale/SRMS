@@ -1,337 +1,4 @@
-// import React, { useState, useEffect } from "react";
-// import axios from "axios";
-
-// const API = "http://localhost:5003/api";
-
-// const ResultsPage = () => {
-//     const [activeTab, setActiveTab] = useState("view");
-//     const [editData, setEditData] = useState(null);
-
-//     const handleEditInitiate = (result) => {
-//         setEditData(result);
-//         setActiveTab("add");
-//     };
-
-//     return (
-//         <div className="results-container">
-//             <div className="content-header">
-//                 <h1>Results Management</h1>
-//                 <p>Declare, update, and manage student exam scores.</p>
-//             </div>
-
-//             <div className="tab-bar">
-//                 <button
-//                     className={`tab-btn ${activeTab === "view" ? "active" : ""}`}
-//                     onClick={() => { setActiveTab("view"); setEditData(null); }}
-//                 >
-//                     View Results
-//                 </button>
-//                 <button
-//                     className={`tab-btn ${activeTab === "add" ? "active" : ""}`}
-//                     onClick={() => setActiveTab("add")}
-//                 >
-//                     {editData ? "Update Result" : "Declare Result"}
-//                 </button>
-//             </div>
-
-//             {activeTab === "view" && <ViewResultsTab onEdit={handleEditInitiate} />}
-//             {activeTab === "add" && (
-//                 <AddResultTab
-//                     editData={editData}
-//                     onSuccess={() => { setEditData(null); setActiveTab("view"); }}
-//                 />
-//             )}
-//         </div>
-//     );
-// };
-
-// // ─── View Results Tab ─────────────────────────────────────────────────────────
-// const ViewResultsTab = ({ onEdit }) => {
-//     const [allResults, setAllResults] = useState([]);
-//     const [subjects, setSubjects] = useState([]);
-//     const [students, setStudents] = useState([]);
-//     const [searchRollId, setSearchRollId] = useState("");
-//     const [loading, setLoading] = useState(true);
-//     const [error, setError] = useState("");
-
-//     const fetchData = async () => {
-//         try {
-//             setLoading(true);
-//             const [studRes, subRes, resData] = await Promise.all([
-//                 axios.get(`${API}/students/get`),
-//                 axios.get(`${API}/subjects/all`),
-//                 axios.get(`${API}/results/all`)
-//             ]);
-
-//             setStudents(studRes.data);
-//             setSubjects(subRes.data);
-
-//             if (resData.data && resData.data.success === true) {
-//                 setAllResults(resData.data.data);
-//             } else {
-//                 setAllResults([]);
-//             }
-
-//             setError("");
-//         } catch (err) {
-//             console.error("Fetch error:", err);
-//             setError("Failed to fetch data. Check if server is running on port 5003.");
-//         } finally {
-//             setLoading(false);
-//         }
-//     };
-
-//     useEffect(() => { fetchData(); }, []);
-
-//     const handleDelete = async (id) => {
-//         if (!window.confirm("Delete this result permanently?")) return;
-//         try {
-//             await axios.delete(`${API}/results/delete/${id}`);
-//             fetchData();
-//         } catch (err) {
-//             alert(err.response?.data?.message || "Delete failed");
-//         }
-//     };
-
-//     const getStudentName = (rollId) =>
-//         students.find(s => s.RollId === rollId)?.StudentName || "Unknown Student";
-
-//     const getSubjectName = (code) =>
-//         subjects.find(s => s.SubjectCode === code)?.SubjectName || code;
-
-//     const getStudentClass = (rollId) =>
-//         students.find(s => s.RollId === rollId)?.ClassId || "";
-
-//     const filteredResults = allResults.filter(r =>
-//         r.RollId?.toLowerCase().includes(searchRollId.toLowerCase())
-//     );
-
-//     return (
-//         <div className="section-card">
-//             {error && <div className="alert alert-error">⚠ {error}</div>}
-
-//             <div className="filter-bar">
-//                 <input
-//                     type="text"
-//                     placeholder="Search by Roll ID..."
-//                     value={searchRollId}
-//                     onChange={(e) => setSearchRollId(e.target.value)}
-//                 />
-//                 {searchRollId && (
-//                     <button className="btn btn-sm" onClick={() => setSearchRollId("")}>Clear</button>
-//                 )}
-//             </div>
-
-//             <div className="table-wrapper">
-//                 <table className="data-table">
-//                     <thead>
-//                         <tr>
-//                             <th>Student</th>
-//                             <th>Roll ID</th>
-//                             <th>Class</th>
-//                             <th>Subject</th>
-//                             <th>Marks</th>
-//                             <th>Actions</th>
-//                         </tr>
-//                     </thead>
-//                     <tbody>
-//                         {loading ? (
-//                             <tr><td colSpan="6" className="table-status-msg">Loading results...</td></tr>
-//                         ) : filteredResults.length > 0 ? (
-//                             filteredResults.map((r) => (
-//                                 <tr key={r._id}>
-//                                     <td>{getStudentName(r.RollId)}</td>
-//                                     <td>{r.RollId}</td>
-//                                     <td>{getStudentClass(r.RollId)}</td>
-//                                     <td>{getSubjectName(r.SubjectCode)}</td>
-//                                     <td><strong>{r.Marks}</strong></td>
-//                                     <td>
-//                                         <div className="action-btns">
-//                                             <button className="btn btn-sm" onClick={() => onEdit(r)}>Edit</button>
-//                                             <button
-//                                                 className="btn btn-sm btn-danger"
-//                                                 onClick={() => handleDelete(r._id)}
-//                                             >
-//                                                 Delete
-//                                             </button>
-//                                         </div>
-//                                     </td>
-//                                 </tr>
-//                             ))
-//                         ) : (
-//                             <tr><td colSpan="6" className="table-status-msg">No results found.</td></tr>
-//                         )}
-//                     </tbody>
-//                 </table>
-//             </div>
-//         </div>
-//     );
-// };
-
-// // ─── Add / Edit Result Tab ────────────────────────────────────────────────────
-// const AddResultTab = ({ editData, onSuccess }) => {
-//     const [students, setStudents] = useState([]);
-//     const [allSubjects, setAllSubjects] = useState([]);
-//     const [filteredSubjects, setFilteredSubjects] = useState([]);
-//     const [loading, setLoading] = useState(false);
-//     const [error, setError] = useState("");
-//     const [formData, setFormData] = useState({ RollId: "", SubjectCode: "", Marks: "" });
-
-//     useEffect(() => {
-//         const loadDropdowns = async () => {
-//             try {
-//                 const [st, sub] = await Promise.all([
-//                     axios.get(`${API}/students/get`),
-//                     axios.get(`${API}/subjects/all`)
-//                 ]);
-//                 setStudents(st.data);
-//                 setAllSubjects(sub.data);
-//             } catch (err) {
-//                 console.error("Error loading dropdowns", err);
-//                 setError("Failed to load students or subjects.");
-//             }
-//         };
-//         loadDropdowns();
-
-//         if (editData) {
-//             setFormData({
-//                 RollId: editData.RollId,
-//                 SubjectCode: editData.SubjectCode,
-//                 Marks: editData.Marks
-//             });
-//         } else {
-//             setFormData({ RollId: "", SubjectCode: "", Marks: "" });
-//         }
-//     }, [editData]);
-
-//     // Filter subjects when student changes
-//     useEffect(() => {
-//         if (!formData.RollId) {
-//             setFilteredSubjects([]);
-//             return;
-//         }
-//         const selectedStudent = students.find(s => s.RollId === formData.RollId);
-//         if (selectedStudent?.ClassId) {
-//             const classSubjects = allSubjects.filter(s => s.ClassId === selectedStudent.ClassId);
-//             setFilteredSubjects(classSubjects);
-//         } else {
-//             setFilteredSubjects(allSubjects);
-//         }
-//     }, [formData.RollId, students, allSubjects]);
-
-//     const handleStudentChange = (e) => {
-//         // Reset subject when student changes
-//         setFormData({ ...formData, RollId: e.target.value, SubjectCode: "" });
-//     };
-
-//     const handleSubmit = async (e) => {
-//         e.preventDefault();
-//         setError("");
-
-//         const marks = Number(formData.Marks);
-//         if (isNaN(marks) || marks < 0 || marks > 100) {
-//             setError("Marks must be a number between 0 and 100.");
-//             return;
-//         }
-
-//         setLoading(true);
-//         const payload = { ...formData, Marks: marks };
-
-//         try {
-//             if (editData) {
-//                 await axios.put(`${API}/results/update/${editData._id}`, payload);
-//             } else {
-//                 await axios.post(`${API}/results/addResult`, payload);
-//             }
-//             onSuccess();
-//         } catch (err) {
-//             const msg = err.response?.data?.message || "Operation failed. Check console.";
-//             setError(msg);
-//             console.error("Submission error:", err.response || err);
-//         } finally {
-//             setLoading(false);
-//         }
-//     };
-
-//     const selectedStudent = students.find(s => s.RollId === formData.RollId);
-
-//     return (
-//         <div className="section-card">
-//             <h3>{editData ? "Update Marks" : "Declare New Result"}</h3>
-
-//             {error && <div className="alert alert-error">⚠ {error}</div>}
-
-//             <form onSubmit={handleSubmit} className="form-grid">
-//                 <div className="form-group">
-//                     <label>Student</label>
-//                     <select
-//                         value={formData.RollId}
-//                         disabled={!!editData}
-//                         onChange={handleStudentChange}
-//                         required
-//                     >
-//                         <option value="">-- Select Student --</option>
-//                         {students.map(s => (
-//                             <option key={s._id} value={s.RollId}>
-//                                 {s.StudentName} ({s.RollId})
-//                             </option>
-//                         ))}
-//                     </select>
-//                     {selectedStudent?.ClassId && (
-//                         <small style={{ color: "#888", marginTop: "4px", display: "block" }}>
-//                             Class: {selectedStudent.ClassId}
-//                         </small>
-//                     )}
-//                 </div>
-
-//                 <div className="form-group">
-//                     <label>Subject</label>
-//                     <select
-//                         value={formData.SubjectCode}
-//                         disabled={!!editData}
-//                         onChange={e => setFormData({ ...formData, SubjectCode: e.target.value })}
-//                         required
-//                     >
-//                         <option value="">
-//                             {!formData.RollId
-//                                 ? "-- Select Student First --"
-//                                 : filteredSubjects.length === 0
-//                                     ? "-- No Subjects for this Class --"
-//                                     : "-- Select Subject --"}
-//                         </option>
-//                         {filteredSubjects.map(s => (
-//                             <option key={s._id} value={s.SubjectCode}>
-//                                 {s.SubjectName} ({s.SubjectCode})
-//                             </option>
-//                         ))}
-//                     </select>
-//                 </div>
-
-//                 <div className="form-group">
-//                     <label>Marks (0–100)</label>
-//                     <input
-//                         type="number"
-//                         value={formData.Marks}
-//                         onChange={e => setFormData({ ...formData, Marks: e.target.value })}
-//                         required
-//                         min="0"
-//                         max="100"
-//                     />
-//                 </div>
-
-//                 <div className="form-actions">
-//                     <button type="submit" className="btn btn-primary" disabled={loading}>
-//                         {loading ? "Processing..." : editData ? "Update Result" : "Save Result"}
-//                     </button>
-//                 </div>
-//             </form>
-//         </div>
-//     );
-// };
-
-// export default ResultsPage;
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
 const API = "http://localhost:5003/api";
@@ -340,8 +7,9 @@ const ResultsPage = () => {
     const [activeTab, setActiveTab] = useState("view");
     const [editData, setEditData] = useState(null);
 
-    const handleEditInitiate = (result) => {
-        setEditData(result);
+    // Helper to switch tabs and pass data for editing
+    const handleEditInitiate = (data) => {
+        setEditData(data);
         setActiveTab("add");
     };
 
@@ -349,7 +17,7 @@ const ResultsPage = () => {
         <div className="results-container">
             <div className="content-header">
                 <h1>Results Management</h1>
-                <p>Declare, update, and manage student exam scores.</p>
+                <p>Manage and declare student exam scores by class.</p>
             </div>
 
             <div className="tab-bar">
@@ -363,7 +31,7 @@ const ResultsPage = () => {
                     className={`tab-btn ${activeTab === "add" ? "active" : ""}`}
                     onClick={() => setActiveTab("add")}
                 >
-                    {editData ? "Update Result" : "Declare Result"}
+                    {editData?._id ? "Update Result" : "Declare Result"}
                 </button>
             </div>
 
@@ -378,125 +46,141 @@ const ResultsPage = () => {
     );
 };
 
-// ─── View Results Tab ─────────────────────────────────────────────────────────
+// ─── View Results Tab (With Class Drill-down) ──────────────────────────────
 const ViewResultsTab = ({ onEdit }) => {
+    const [classes, setClasses] = useState([]);
+    const [selectedClassId, setSelectedClassId] = useState(null);
     const [allResults, setAllResults] = useState([]);
     const [subjects, setSubjects] = useState([]);
     const [students, setStudents] = useState([]);
-    const [searchRollId, setSearchRollId] = useState("");
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
+    const [searchRollId, setSearchRollId] = useState("");
 
-    const fetchData = async () => {
+    const fetchData = useCallback(async () => {
         try {
             setLoading(true);
-            const [studRes, subRes, resData] = await Promise.all([
+            const [classRes, studRes, subRes, resData] = await Promise.all([
+                axios.get(`${API}/classes/get`),
                 axios.get(`${API}/students/get`),
                 axios.get(`${API}/subjects/all`),
                 axios.get(`${API}/results/all`)
             ]);
 
+            setClasses(classRes.data);
             setStudents(studRes.data);
             setSubjects(subRes.data);
-
-            if (resData.data && resData.data.success === true) {
-                setAllResults(resData.data.data);
-            } else {
-                setAllResults([]);
-            }
-
-            setError("");
+            
+            // Standardizing response format
+            const resultsArray = resData.data?.data || resData.data || [];
+            setAllResults(Array.isArray(resultsArray) ? resultsArray : []);
         } catch (err) {
-            console.error("Fetch error:", err);
-            setError("Failed to fetch data. Check if server is running on port 5003.");
+            console.error("Fetch error", err);
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
-    useEffect(() => { fetchData(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    useEffect(() => { fetchData(); }, [fetchData]);
 
-    const handleDelete = async (id) => {
-        if (!window.confirm("Delete this result permanently?")) return;
-        try {
-            await axios.delete(`${API}/results/delete/${id}`);
-            fetchData();
-        } catch (err) {
-            alert(err.response?.data?.message || "Delete failed");
-        }
-    };
+    // --- VIEW 2: Results Table for Selected Class ---
+    if (selectedClassId) {
+        const classStudents = students.filter(s => s.ClassId === selectedClassId)
+            .filter(s => s.RollId.toLowerCase().includes(searchRollId.toLowerCase()));
+        
+        const classSubjects = subjects.filter(sub => sub.ClassId === selectedClassId);
 
-    const getStudentName = (rollId) =>
-        students.find(s => s.RollId === rollId)?.StudentName || "Unknown Student";
+        // Map results for quick lookup: { RollId: { SubjectCode: resultObject } }
+        const classResultsMap = allResults.reduce((acc, curr) => {
+            if (!acc[curr.RollId]) acc[curr.RollId] = {};
+            acc[curr.RollId][curr.SubjectCode] = curr;
+            return acc;
+        }, {});
 
-    const getSubjectName = (code) =>
-        subjects.find(s => s.SubjectCode === code)?.SubjectName || code;
+        return (
+            <div className="section-card">
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
+                    <button className="btn btn-sm" onClick={() => setSelectedClassId(null)}>← Back to Classes</button>
+                    <h3>Class: {selectedClassId}</h3>
+                    <input 
+                        type="text" 
+                        placeholder="Search Roll ID..." 
+                        value={searchRollId}
+                        onChange={(e) => setSearchRollId(e.target.value)}
+                        style={{ padding: '5px 10px', borderRadius: '4px', border: '1px solid #ddd' }}
+                    />
+                </div>
 
-    const getStudentClass = (rollId) =>
-        students.find(s => s.RollId === rollId)?.ClassId || "";
-
-    const filteredResults = allResults.filter(r =>
-        r.RollId?.toLowerCase().includes(searchRollId.toLowerCase())
-    );
-
-    return (
-        <div className="section-card">
-            {error && <div className="alert alert-error">⚠ {error}</div>}
-
-            <div className="filter-bar">
-                <input
-                    type="text"
-                    placeholder="Search by Roll ID..."
-                    value={searchRollId}
-                    onChange={(e) => setSearchRollId(e.target.value)}
-                />
-                {searchRollId && (
-                    <button className="btn btn-sm" onClick={() => setSearchRollId("")}>Clear</button>
-                )}
-            </div>
-
-            <div className="table-wrapper">
-                <table className="data-table">
-                    <thead>
-                        <tr>
-                            <th>Student</th>
-                            <th>Roll ID</th>
-                            <th>Class</th>
-                            <th>Subject</th>
-                            <th>Marks</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {loading ? (
-                            <tr><td colSpan="6" className="table-status-msg">Loading results...</td></tr>
-                        ) : filteredResults.length > 0 ? (
-                            filteredResults.map((r) => (
-                                <tr key={r._id}>
-                                    <td>{getStudentName(r.RollId)}</td>
-                                    <td>{r.RollId}</td>
-                                    <td>{getStudentClass(r.RollId)}</td>
-                                    <td>{getSubjectName(r.SubjectCode)}</td>
-                                    <td><strong>{r.Marks}</strong></td>
+                <div className="table-wrapper" style={{ overflowX: 'auto' }}>
+                    <table className="data-table">
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Roll ID</th>
+                                {classSubjects.map(sub => <th key={sub.SubjectCode}>{sub.SubjectName}</th>)}
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {classStudents.map(student => (
+                                <tr key={student.RollId}>
+                                    <td>{student.StudentName}</td>
+                                    <td>{student.RollId}</td>
+                                    {classSubjects.map(sub => {
+                                        const res = classResultsMap[student.RollId]?.[sub.SubjectCode];
+                                        return (
+                                            <td key={sub.SubjectCode}>
+                                                {res ? <strong>{res.Marks}</strong> : <span style={{color: '#ccc'}}>-</span>}
+                                            </td>
+                                        );
+                                    })}
                                     <td>
-                                        <div className="action-btns">
-                                            <button className="btn btn-sm" onClick={() => onEdit(r)}>Edit</button>
-                                            <button
-                                                className="btn btn-sm btn-danger"
-                                                onClick={() => handleDelete(r._id)}
-                                            >
-                                                Delete
-                                            </button>
-                                        </div>
+                                        <button 
+                                            className="btn btn-sm" 
+                                            onClick={() => {
+                                                const firstRes = Object.values(classResultsMap[student.RollId] || {})[0];
+                                                onEdit(firstRes || { RollId: student.RollId });
+                                            }}
+                                        >
+                                            {classResultsMap[student.RollId] ? "Edit" : "Declare"}
+                                        </button>
                                     </td>
                                 </tr>
-                            ))
-                        ) : (
-                            <tr><td colSpan="6" className="table-status-msg">No results found.</td></tr>
-                        )}
-                    </tbody>
-                </table>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+                {classSubjects.length === 0 && (
+                    <div style={{ marginTop: '15px', color: '#e67e22', fontWeight: 'bold' }}>
+                        ⚠️ No subjects defined for this class. Results cannot be declared until subjects are added.
+                    </div>
+                )}
             </div>
+        );
+    }
+
+    // --- VIEW 1: Class Selection Grid ---
+    return (
+        <div className="class-selection-container">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                <h3>Select a Class</h3>
+                <button onClick={fetchData} className="btn btn-sm">Refresh Counts</button>
+            </div>
+            {loading ? <p>Loading classes...</p> : (
+                <div className="class-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '20px' }}>
+                    {classes.map(cls => (
+                        <div 
+                            key={cls._id} 
+                            className="section-card class-card" 
+                            onClick={() => setSelectedClassId(cls.ClassName)}
+                            style={{ textAlign: 'center', cursor: 'pointer', padding: '20px', border: '1px solid #eee' }}
+                        >
+                            <div style={{ fontSize: '24px' }}>{cls.totalResults > 0 ? "✅" : "📁"}</div>
+                            <h4>{cls.ClassName}</h4>
+                            <p style={{ fontSize: '13px', color: '#666' }}>{cls.totalResults || 0} Results Declared</p>
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 };
@@ -511,9 +195,8 @@ const AddResultTab = ({ editData, onSuccess }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
-    // Load dropdowns once on mount
     useEffect(() => {
-        const loadDropdowns = async () => {
+        const loadInitialData = async () => {
             try {
                 const [st, sub] = await Promise.all([
                     axios.get(`${API}/students/get`),
@@ -522,167 +205,109 @@ const AddResultTab = ({ editData, onSuccess }) => {
                 setStudents(st.data);
                 setAllSubjects(sub.data);
             } catch (err) {
-                console.error("Error loading dropdowns", err);
-                setError("Failed to load students or subjects.");
+                setError("Error loading form data.");
             }
         };
-        loadDropdowns();
+        loadInitialData();
     }, []);
 
-    // Sync form when editData changes
     useEffect(() => {
         if (editData) {
             setSelectedRollId(editData.RollId);
-            setMarksMap({ [editData.SubjectCode]: editData.Marks });
-        } else {
-            setSelectedRollId("");
-            setMarksMap({});
+            if (editData.SubjectCode) {
+                setMarksMap({ [editData.SubjectCode]: editData.Marks });
+            }
         }
     }, [editData]);
 
-    // Filter subjects when student, student list, or subject list changes
     useEffect(() => {
-        if (!selectedRollId) {
-            setFilteredSubjects([]);
-            return;
-        }
+        if (!selectedRollId) return setFilteredSubjects([]);
         const student = students.find(s => s.RollId === selectedRollId);
-        const classSubjects = student?.ClassId
-            ? allSubjects.filter(s => s.ClassId === student.ClassId)
-            : allSubjects;
-        setFilteredSubjects(classSubjects);
+        if (student) {
+            setFilteredSubjects(allSubjects.filter(sub => sub.ClassId === student.ClassId));
+        }
     }, [selectedRollId, students, allSubjects]);
-
-    const handleStudentChange = (e) => {
-        setSelectedRollId(e.target.value);
-        setMarksMap({});
-    };
-
-    const handleMarksChange = (subjectCode, value) => {
-        setMarksMap(prev => ({ ...prev, [subjectCode]: value }));
-    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
-
-        if (Object.keys(marksMap).length === 0) {
-            setError("Enter marks for at least one subject.");
-            return;
-        }
-
-        for (const [code, val] of Object.entries(marksMap)) {
-            const n = Number(val);
-            if (val === "" || isNaN(n) || n < 0 || n > 100) {
-                setError(`Invalid marks for subject ${code}. Must be between 0 and 100.`);
-                return;
-            }
-        }
-
         setLoading(true);
         try {
-            if (editData) {
+            if (editData?._id) {
+                // Update Single Subject
                 await axios.put(`${API}/results/update/${editData._id}`, {
                     RollId: selectedRollId,
                     SubjectCode: editData.SubjectCode,
                     Marks: Number(marksMap[editData.SubjectCode])
                 });
             } else {
-                const requests = Object.entries(marksMap).map(([SubjectCode, Marks]) =>
-                    axios.post(`${API}/results/addResult`, {
-                        RollId: selectedRollId,
-                        SubjectCode,
-                        Marks: Number(Marks)
+                // Bulk Declare Subjects
+                const entries = Object.entries(marksMap).filter(([_, v]) => v !== "");
+                if (entries.length === 0) throw new Error("Please enter marks for at least one subject.");
+                
+                await Promise.all(entries.map(([SubjectCode, Marks]) => 
+                    axios.post(`${API}/results/addResult`, { 
+                        RollId: selectedRollId, 
+                        SubjectCode, 
+                        Marks: Number(Marks) 
                     })
-                );
-                await Promise.all(requests);
+                ));
             }
             onSuccess();
         } catch (err) {
-            const msg = err.response?.data?.message || "One or more submissions failed. Check console.";
-            setError(msg);
-            console.error("Submission error:", err.response || err);
+            setError(err.response?.data?.message || err.message || "Operation failed.");
         } finally {
             setLoading(false);
         }
     };
 
-    const selectedStudent = students.find(s => s.RollId === selectedRollId);
-
     return (
         <div className="section-card">
-            <h3>{editData ? "Update Marks" : "Declare New Result"}</h3>
-
-            {error && <div className="alert alert-error">⚠ {error}</div>}
-
-            <form onSubmit={handleSubmit} className="form-grid">
-                <div className="form-group">
+            <h3>{editData?._id ? "Edit Marks" : "Declare Marks"}</h3>
+            {error && <div style={{ color: 'red', marginBottom: '15px' }}>⚠ {error}</div>}
+            
+            <form onSubmit={handleSubmit}>
+                <div className="form-group" style={{ marginBottom: '20px' }}>
                     <label>Student</label>
-                    <select
-                        value={selectedRollId}
-                        disabled={!!editData}
-                        onChange={handleStudentChange}
+                    <select 
+                        value={selectedRollId} 
+                        disabled={!!editData?._id}
+                        onChange={(e) => setSelectedRollId(e.target.value)}
                         required
+                        style={{ width: '100%', padding: '8px' }}
                     >
                         <option value="">-- Select Student --</option>
                         {students.map(s => (
-                            <option key={s._id} value={s.RollId}>
-                                {s.StudentName} ({s.RollId})
-                            </option>
+                            <option key={s._id} value={s.RollId}>{s.StudentName} ({s.RollId})</option>
                         ))}
                     </select>
-                    {selectedStudent?.ClassId && (
-                        <small style={{ color: "#888", marginTop: "4px", display: "block" }}>
-                            Class: {selectedStudent.ClassId}
-                        </small>
-                    )}
                 </div>
 
-                {filteredSubjects.length > 0 && (
-                    <div className="form-group">
-                        <label>Marks per Subject</label>
+                {filteredSubjects.length > 0 ? (
+                    <div className="marks-input-area">
+                        <label style={{ fontWeight: 'bold' }}>Enter Subject Marks:</label>
                         {filteredSubjects.map(sub => (
-                            <div
-                                key={sub._id}
-                                style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: "12px",
-                                    marginBottom: "12px"
-                                }}
-                            >
-                                <span style={{ minWidth: "220px", fontSize: "14px" }}>
-                                    {sub.SubjectName}
-                                    <span style={{ color: "#888", marginLeft: "6px" }}>
-                                        ({sub.SubjectCode})
-                                    </span>
-                                </span>
-                                <input
-                                    type="number"
-                                    min="0"
-                                    max="100"
-                                    placeholder="0–100"
-                                    value={marksMap[sub.SubjectCode] ?? ""}
-                                    disabled={editData && sub.SubjectCode !== editData.SubjectCode}
-                                    onChange={e => handleMarksChange(sub.SubjectCode, e.target.value)}
-                                    style={{ width: "100px" }}
+                            <div key={sub._id} style={{ display: 'flex', gap: '15px', alignItems: 'center', marginTop: '10px' }}>
+                                <span style={{ width: '150px' }}>{sub.SubjectName}</span>
+                                <input 
+                                    type="number" 
+                                    min="0" max="100"
+                                    value={marksMap[sub.SubjectCode] || ""}
+                                    onChange={(e) => setMarksMap({...marksMap, [sub.SubjectCode]: e.target.value})}
+                                    style={{ width: '80px', padding: '5px' }}
                                 />
                             </div>
                         ))}
                     </div>
-                )}
+                ) : selectedRollId && <p style={{color: 'orange'}}>No subjects available for this student's class.</p>}
 
-                {selectedRollId && filteredSubjects.length === 0 && (
-                    <p style={{ color: "#888" }}>No subjects found for this student's class.</p>
-                )}
-
-                <div className="form-actions">
-                    <button
-                        type="submit"
-                        className="btn btn-primary"
-                        disabled={loading || !selectedRollId}
+                <div className="form-actions" style={{ marginTop: '25px' }}>
+                    <button 
+                        type="submit" 
+                        className="btn btn-primary" 
+                        disabled={loading || !selectedRollId || filteredSubjects.length === 0}
                     >
-                        {loading ? "Processing..." : editData ? "Update Result" : "Save All Results"}
+                        {loading ? "Saving..." : "Save Results"}
                     </button>
                 </div>
             </form>

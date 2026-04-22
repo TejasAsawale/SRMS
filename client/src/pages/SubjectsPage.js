@@ -10,22 +10,22 @@ const CLASSES = [
 ];
 
 const SubjectsPage = () => {
-    const [subjects, setSubjects]   = useState([]);
-    const [students, setStudents]   = useState([]);
-    const [loading, setLoading]     = useState(true);
-    const [error, setError]         = useState("");
+    const [subjects, setSubjects] = useState([]);
+    const [students, setStudents] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
 
     // Class subject modal
-    const [classModal, setClassModal]   = useState(false);
+    const [classModal, setClassModal] = useState(false);
     const [classModalData, setClassModalData] = useState(null); // { classId, editSubject }
 
     // Student subject modal
-    const [studentModal, setStudentModal]     = useState(false);
+    const [studentModal, setStudentModal] = useState(false);
     const [studentModalData, setStudentModalData] = useState(null); // student object
 
     // Student table filter
     const [selectedClass, setSelectedClass] = useState("All");
-    const [search, setSearch]               = useState("");
+    const [search, setSearch] = useState("");
 
     const fetchData = async () => {
         try {
@@ -82,12 +82,13 @@ const SubjectsPage = () => {
     const getClassSubjects = (classId) => subjects.filter(s => s.ClassId === classId);
 
     const filteredStudents = students.filter(s => {
+        const hasSubjects = s.Subjects && s.Subjects.length > 0;
         const matchClass = selectedClass === "All" || s.ClassId === selectedClass;
         const matchSearch =
             s.StudentName?.toLowerCase().includes(search.toLowerCase()) ||
             s.RollId?.toLowerCase().includes(search.toLowerCase()) ||
             s.StudentEmail?.toLowerCase().includes(search.toLowerCase());
-        return matchClass && matchSearch;
+        return hasSubjects && matchClass && matchSearch;
     });
 
     const getAvatar = (name) =>
@@ -313,11 +314,11 @@ const Modal = ({ title, onClose, children }) => (
 
 // ─── Class Subject Manager (inside modal) ─────────────────────────────────────
 const ClassSubjectManager = ({ classId, subjects, onSuccess, onClose }) => {
-    const [showForm, setShowForm]   = useState(false);
+    const [showForm, setShowForm] = useState(false);
     const [editSubject, setEditSubject] = useState(null);
-    const [formData, setFormData]   = useState({ SubjectName: "", SubjectCode: "" });
-    const [loading, setLoading]     = useState(false);
-    const [error, setError]         = useState("");
+    const [formData, setFormData] = useState({ SubjectName: "", SubjectCode: "" });
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
 
     const handleEdit = (subject) => {
         setEditSubject(subject);
@@ -436,10 +437,10 @@ const ClassSubjectManager = ({ classId, subjects, onSuccess, onClose }) => {
 
 // ─── Student Subject Manager (inside modal) ───────────────────────────────────
 const StudentSubjectManager = ({ student, classSubjects, onSuccess, onCancel }) => {
-    const [selected, setSelected]       = useState(student.Subjects || []);
-    const [customCode, setCustomCode]   = useState("");
-    const [loading, setLoading]         = useState(false);
-    const [error, setError]             = useState("");
+    const [selected, setSelected] = useState(student.Subjects || []);
+    const [customCode, setCustomCode] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
     const [addingCustom, setAddingCustom] = useState(false);
 
     const toggleSubject = (code) => {
