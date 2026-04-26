@@ -786,6 +786,46 @@ body {
     border-top: 1px solid var(--border);
 }
 
+/* Styling specifically for the printable Result Card */
+.result-card-print {
+    background: #fff;
+    padding: 10px;
+}
+
+.result-card-print .data-table thead th {
+    background: #1e2533; /* Dark header like the image */
+    color: #ffffff;
+}
+
+.result-card-print .data-table td {
+    text-align: center;
+}
+
+.result-card-print .data-table th:first-child,
+.result-card-print .data-table td:first-child {
+    text-align: left;
+}
+
+/* Ensure progress report text looks like the PDF image */
+.pdf-report-header {
+    text-align: center;
+    color: #e07b54;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 24px;
+    border-bottom: 2px solid #e07b54;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+}
+
+/* Highlighting the total in the table footer style */
+.result-total-row {
+    text-align: right;
+    font-weight: 700;
+    padding: 15px;
+    font-size: 14px;
+}
+
 /* =========================================================
    RESPONSIVE
    ========================================================= */
