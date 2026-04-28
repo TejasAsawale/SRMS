@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* ResultsPage.css */
 .results-container {
     padding: 24px;
@@ -99,4 +100,248 @@
 .btn-delete-row:hover {
     background: #ff4d4f;
     color: #fff;
+=======
+/* --- Variables & Core --- */
+:root {
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --danger: #e74c3c;
+    --success: #16a34a;
+    --warning: #92400e;
+    --warning-bg: #fef9c3;
+    --border: #e2e8f0;
+    --bg-card: #ffffff;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    /* Professional Report Accent */
+    --report-accent: #5d1a24;
+}
+
+/* --- Layout Containers --- */
+.results-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.content-header { margin-bottom: 24px; }
+.content-header h1 { font-size: 24px; color: var(--text-main); margin: 0; }
+.content-header p { color: var(--text-muted); margin: 4px 0 0; }
+
+/* --- Tab Navigation --- */
+.tab-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+}
+
+.tab-btn {
+    padding: 10px 20px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text-muted);
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.tab-btn.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+}
+
+/* --- App UI Components --- */
+.section-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.drilldown-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    gap: 10px;
+}
+
+.search-input {
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th {
+    background: #f8fafc;
+    text-align: left;
+    padding: 12px 15px;
+    color: var(--text-muted);
+    border-bottom: 2px solid var(--border);
+}
+
+.data-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--border);
+}
+
+.btn-pdf { background: var(--danger); color: #fff; padding: 6px 12px; border: none; border-radius: var(--radius-sm); cursor: pointer; }
+.btn-csv { background: var(--success); color: #fff; padding: 6px 12px; border: none; border-radius: var(--radius-sm); cursor: pointer; }
+
+/* --- PROFESSIONAL PRINT STYLES --- */
+
+.pdf-body {
+    background-color: #f0f0f0;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+.print-body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f0f0f0;
+    padding: 30px 0;
+}
+
+.report-card {
+    background: #ffffff;
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    padding: 40px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+    position: relative;
+}
+
+.top-accent-bar {
+    height: 12px;
+    background: var(--report-accent);
+    margin: -40px -40px 30px -40px;
+}
+
+.report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px double var(--report-accent);
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.school-branding h1 {
+    margin: 0;
+    color: var(--report-accent);
+    font-size: 28px;
+    text-transform: uppercase;
+}
+
+.report-logo {
+    font-size: 50px;
+}
+
+.student-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 30px;
+    background: #fdf8f8;
+    padding: 20px;
+    border: 1px solid #eee;
+}
+
+.info-item {
+    font-size: 16px;
+    color: var(--text-main);
+}
+
+.marks-table-professional {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+}
+
+.marks-table-professional th {
+    background: var(--report-accent);
+    color: #fff;
+    padding: 12px;
+    text-align: left;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+.marks-table-professional td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Status */
+.status-pass { color: var(--success); font-weight: bold; }
+.status-fail { color: var(--danger); font-weight: bold; }
+
+.report-footer-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 20px;
+}
+
+.final-result-badge {
+    text-align: center;
+    padding: 15px;
+    border-radius: 8px;
+    width: 220px;
+    border: 2px solid;
+}
+
+.badge-pass { border-color: var(--success); background: #e8f5e9; color: var(--success); }
+.badge-fail { border-color: var(--danger); background: #ffebee; color: var(--danger); }
+
+.final-result-badge .label { display: block; font-size: 12px; font-weight: bold; }
+.final-result-badge .value { display: block; font-size: 24px; font-weight: bold; margin: 5px 0; }
+.final-result-badge .note { font-size: 11px; font-style: italic; }
+
+.score-summary {
+    text-align: right;
+    font-size: 18px;
+}
+
+.score-row { margin-bottom: 8px; color: var(--text-main); }
+
+.signature-section {
+    margin-top: 80px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.sig-box {
+    width: 180px;
+    border-top: 1px solid var(--text-main);
+    text-align: center;
+    padding-top: 8px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Print Overrides */
+@media print {
+    .pdf-body,
+    .print-body { background: none; padding: 0; }
+    .report-card { border: none; box-shadow: none; width: 100%; margin: 0; }
+    .top-accent-bar,
+    .marks-table-professional th {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+>>>>>>> 756f1b8 (Update theme for admin management dashboard)
 }

@@ -154,4 +154,29 @@ const deleteResult = async (req, res) => {
     }
 };
 
-module.exports = { addResult, getAllResults, updateResult, deleteResult };
+const updateResultByData = async (req, res) => {
+    try {
+        const { RollId, SubjectCode, Marks } = req.body;
+
+        if (!RollId || !SubjectCode || Marks === undefined) {
+            return res.status(400).json({ success: false, message: "Missing required fields" });
+        }
+
+        // Find by student and subject, then update the marks
+        const updatedResult = await Result.findOneAndUpdate(
+            { RollId, SubjectCode },
+            { Marks: Number(Marks) },
+            { new: true, runValidators: true, upsert: true }
+        );
+
+        res.status(200).json({ 
+            success: true, 
+            message: "Result updated successfully", 
+            data: updatedResult 
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Update Error", error: error.message });
+    }
+};
+
+module.exports = { addResult, getAllResults, updateResult, deleteResult, updateResultByData};

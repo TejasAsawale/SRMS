@@ -561,23 +561,85 @@ const CLASSES = [
     "Class 9", "Class 10", "Class 11", "Class 12"
 ];
 
+// ─── Skeletons ────────────────────────────────────────────────────────────────
+const ClassCardsSkeleton = () => (
+    <>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: "12px", marginBottom: "12px" }}>
+            {[1, 2, 3, 4, 5, 6].map(i => (
+                <div key={i} style={{ border: "1px solid var(--border)", borderRadius: 10, padding: 14 }}>
+                    <div className="skeleton skeleton-text" style={{ width: "70%", marginBottom: 8 }} />
+                    <div className="skeleton skeleton-text" style={{ width: "40%", marginBottom: 10 }} />
+                    <div className="skeleton skeleton-btn" style={{ width: "100%" }} />
+                </div>
+            ))}
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: "12px" }}>
+            {[1, 2, 3, 4, 5, 6].map(i => (
+                <div key={i} style={{ border: "1px solid var(--border)", borderRadius: 10, padding: 14 }}>
+                    <div className="skeleton skeleton-text" style={{ width: "70%", marginBottom: 8 }} />
+                    <div className="skeleton skeleton-text" style={{ width: "40%", marginBottom: 10 }} />
+                    <div className="skeleton skeleton-btn" style={{ width: "100%" }} />
+                </div>
+            ))}
+        </div>
+    </>
+);
+
+const StudentsTableSkeleton = () => (
+    <div className="table-wrapper">
+        <table className="data-table">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Roll ID</th>
+                    <th>Class</th>
+                    <th>Subjects Assigned</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {[1, 2, 3, 4, 5].map(i => (
+                    <tr key={i}>
+                        <td>
+                            <div className="student-cell">
+                                <div className="skeleton skeleton-avatar" />
+                                <div style={{ flex: 1 }}>
+                                    <div className="skeleton skeleton-text" style={{ width: "60%" }} />
+                                    <div className="skeleton skeleton-text" style={{ width: "80%", marginBottom: 0 }} />
+                                </div>
+                            </div>
+                        </td>
+                        <td><div className="skeleton skeleton-text" style={{ width: "50%" }} /></td>
+                        <td><div className="skeleton skeleton-text" style={{ width: "40%" }} /></td>
+                        <td>
+                            <div style={{ display: "flex", gap: 6 }}>
+                                <div className="skeleton" style={{ width: 60, height: 22, borderRadius: 12 }} />
+                                <div className="skeleton" style={{ width: 70, height: 22, borderRadius: 12 }} />
+                                <div className="skeleton" style={{ width: 55, height: 22, borderRadius: 12 }} />
+                            </div>
+                        </td>
+                        <td><div className="skeleton skeleton-btn" style={{ width: 100 }} /></td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    </div>
+);
+
+// ─── Subjects Page ────────────────────────────────────────────────────────────
 const SubjectsPage = () => {
-    const [subjects, setSubjects] = useState([]);
-    const [students, setStudents] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
+    const [subjects, setSubjects]   = useState([]);
+    const [students, setStudents]   = useState([]);
+    const [loading, setLoading]     = useState(true);
+    const [error, setError]         = useState("");
 
-    // Class subject modal
-    const [classModal, setClassModal] = useState(false);
-    const [classModalData, setClassModalData] = useState(null); // { classId, editSubject }
+    const [classModal, setClassModal]         = useState(false);
+    const [classModalData, setClassModalData] = useState(null);
+    const [studentModal, setStudentModal]     = useState(false);
+    const [studentModalData, setStudentModalData] = useState(null);
 
-    // Student subject modal
-    const [studentModal, setStudentModal] = useState(false);
-    const [studentModalData, setStudentModalData] = useState(null); // student object
-
-    // Student table filter
     const [selectedClass, setSelectedClass] = useState("All");
-    const [search, setSearch] = useState("");
+    const [search, setSearch]               = useState("");
 
     const fetchData = async () => {
         try {
@@ -598,12 +660,12 @@ const SubjectsPage = () => {
 
     useEffect(() => { fetchData(); }, []);
 
-    // ── Class card actions ──
-    const openClassModal = (classId, editSubject = null) => {
-        setClassModalData({ classId, editSubject });
-        setClassModal(true);
-    };
+    const openClassModal   = (classId) => { setClassModalData({ classId }); setClassModal(true); };
+    const closeClassModal  = ()        => { setClassModal(false); setClassModalData(null); };
+    const openStudentModal = (student) => { setStudentModalData(student); setStudentModal(true); };
+    const closeStudentModal = ()       => { setStudentModal(false); setStudentModalData(null); };
 
+<<<<<<< HEAD
     const closeClassModal = () => {
         setClassModal(false);
         setClassModalData(null);
@@ -632,6 +694,18 @@ const SubjectsPage = () => {
             s.StudentEmail?.toLowerCase().includes(search.toLowerCase()));
         
         return matchClass && matchSearch;
+=======
+    const getClassSubjects = (classId) => subjects.filter(s => s.ClassId === classId);
+
+    const filteredStudents = students.filter(s => {
+        const hasSubjects  = s.Subjects && s.Subjects.length > 0;
+        const matchClass   = selectedClass === "All" || s.ClassId === selectedClass;
+        const matchSearch  =
+            s.StudentName?.toLowerCase().includes(search.toLowerCase())  ||
+            s.RollId?.toLowerCase().includes(search.toLowerCase())       ||
+            s.StudentEmail?.toLowerCase().includes(search.toLowerCase());
+        return hasSubjects && matchClass && matchSearch;
+>>>>>>> 756f1b8 (Update theme for admin management dashboard)
     });
 
     const getAvatar = (name) =>
@@ -654,12 +728,15 @@ const SubjectsPage = () => {
 
             {error && <div className="alert alert-error">⚠ {error}</div>}
 
-            {/* ── 12 Class Cards ── */}
+            {/* ── Class Cards ── */}
             <div className="section-card" style={{ marginBottom: "24px" }}>
-                <div className="section-header" style={{ marginBottom: "16px" }}>
-                    <h3 className="section-title">Class Subjects</h3>
-                    <p className="section-meta">Click Edit to manage subjects for each class</p>
+                <div className="section-header">
+                    <div>
+                        <h3 className="section-title">Class Subjects</h3>
+                        <p className="section-meta">Click Edit to manage subjects for each class</p>
+                    </div>
                 </div>
+<<<<<<< HEAD
 
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: "12px" }}>
                     {CLASSES.map(cls => (
@@ -670,6 +747,33 @@ const SubjectsPage = () => {
                             onEdit={() => openClassModal(cls)}
                         />
                     ))}
+=======
+                <div style={{ padding: "16px 20px" }}>
+                    {loading ? <ClassCardsSkeleton /> : (
+                        <>
+                            <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: "12px", marginBottom: "12px" }}>
+                                {CLASSES.slice(0, 6).map(cls => (
+                                    <ClassCard
+                                        key={cls}
+                                        cls={cls}
+                                        subjects={getClassSubjects(cls)}
+                                        onEdit={() => openClassModal(cls)}
+                                    />
+                                ))}
+                            </div>
+                            <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: "12px" }}>
+                                {CLASSES.slice(6, 12).map(cls => (
+                                    <ClassCard
+                                        key={cls}
+                                        cls={cls}
+                                        subjects={getClassSubjects(cls)}
+                                        onEdit={() => openClassModal(cls)}
+                                    />
+                                ))}
+                            </div>
+                        </>
+                    )}
+>>>>>>> 756f1b8 (Update theme for admin management dashboard)
                 </div>
             </div>
 
@@ -679,7 +783,6 @@ const SubjectsPage = () => {
                     <h3 className="section-title">Students & Subject Assignment</h3>
                     <p className="section-meta">{filteredStudents.length} student{filteredStudents.length !== 1 ? "s" : ""} shown</p>
                 </div>
-
                 <div className="filter-bar">
                     <input
                         type="text"
@@ -687,47 +790,43 @@ const SubjectsPage = () => {
                         value={search}
                         onChange={e => setSearch(e.target.value)}
                     />
-                    <select
-                        value={selectedClass}
-                        onChange={e => setSelectedClass(e.target.value)}
-                    >
+                    <select value={selectedClass} onChange={e => setSelectedClass(e.target.value)}>
                         <option value="All">All Classes</option>
-                        {CLASSES.map(c => (
-                            <option key={c} value={c}>{c}</option>
-                        ))}
+                        {CLASSES.map(c => <option key={c} value={c}>{c}</option>)}
                     </select>
                     {search && (
                         <button className="btn btn-sm" onClick={() => setSearch("")}>Clear</button>
                     )}
                 </div>
 
-                <div className="table-wrapper">
-                    <table className="data-table">
-                        <thead>
-                            <tr>
-                                <th>Student</th>
-                                <th>Roll ID</th>
-                                <th>Class</th>
-                                <th>Subjects Assigned</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {loading ? (
-                                <tr><td colSpan="5" className="table-status-msg">Loading...</td></tr>
-                            ) : filteredStudents.length > 0 ? (
-                                filteredStudents.map(s => {
-                                    const classSubjects = getClassSubjects(s.ClassId);
-                                    const assignedSubjects = s.Subjects || [];
-                                    return (
-                                        <tr key={s._id}>
-                                            <td>
-                                                <div className="student-cell">
-                                                    <div className="avatar av-blue">{getAvatar(s.StudentName)}</div>
-                                                    <div>
-                                                        <div className="student-name">{s.StudentName}</div>
-                                                        <div className="student-id">{s.StudentEmail}</div>
+                {loading ? <StudentsTableSkeleton /> : (
+                    <div className="table-wrapper">
+                        <table className="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Roll ID</th>
+                                    <th>Class</th>
+                                    <th>Subjects Assigned</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {filteredStudents.length > 0 ? (
+                                    filteredStudents.map(s => {
+                                        const classSubjects    = getClassSubjects(s.ClassId);
+                                        const assignedSubjects = s.Subjects || [];
+                                        return (
+                                            <tr key={s._id}>
+                                                <td>
+                                                    <div className="student-cell">
+                                                        <div className="avatar av-blue">{getAvatar(s.StudentName)}</div>
+                                                        <div>
+                                                            <div className="student-name">{s.StudentName}</div>
+                                                            <div className="student-id">{s.StudentEmail}</div>
+                                                        </div>
                                                     </div>
+<<<<<<< HEAD
                                                 </div>
                                             </td>
                                             <td>{s.RollId}</td>
@@ -771,21 +870,60 @@ const SubjectsPage = () => {
                         </tbody>
                     </table>
                 </div>
+=======
+                                                </td>
+                                                <td>{s.RollId}</td>
+                                                <td>{s.ClassId || "—"}</td>
+                                                <td>
+                                                    {assignedSubjects.length > 0 ? (
+                                                        <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
+                                                            {assignedSubjects.map(code => {
+                                                                const sub = subjects.find(su => su.SubjectCode === code);
+                                                                return (
+                                                                    <span key={code} style={{ padding: "2px 8px", background: "rgba(59,130,246,0.15)", borderRadius: "12px", fontSize: "11px", color: "#60a5fa" }}>
+                                                                        {sub ? sub.SubjectName : code}
+                                                                    </span>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    ) : (
+                                                        <span style={{ color: "var(--text-muted)", fontSize: "12px" }}>
+                                                            {classSubjects.length === 0 ? "No subjects in this class" : "None assigned"}
+                                                        </span>
+                                                    )}
+                                                </td>
+                                                <td>
+                                                    <button
+                                                        className="btn btn-sm"
+                                                        onClick={() => openStudentModal(s)}
+                                                        disabled={classSubjects.length === 0}
+                                                        title={classSubjects.length === 0 ? "Add subjects to this class first" : "Edit subjects"}
+                                                    >Edit Subjects</button>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })
+                                ) : (
+                                    <tr><td colSpan="5" className="table-status-msg">No students found.</td></tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
+>>>>>>> 756f1b8 (Update theme for admin management dashboard)
             </div>
 
-            {/* ── Class Subject Modal ── */}
+            {/* ── Modals ── */}
             {classModal && classModalData && (
                 <Modal title={`Manage Subjects — ${classModalData.classId}`} onClose={closeClassModal}>
                     <ClassSubjectManager
                         classId={classModalData.classId}
                         subjects={getClassSubjects(classModalData.classId)}
-                        onSuccess={() => { fetchData(); }}
+                        onSuccess={fetchData}
                         onClose={closeClassModal}
                     />
                 </Modal>
             )}
-
-            {/* ── Student Subject Modal ── */}
             {studentModal && studentModalData && (
                 <Modal title={`Edit Subjects — ${studentModalData.StudentName}`} onClose={closeStudentModal}>
                     <StudentSubjectManager
@@ -802,17 +940,9 @@ const SubjectsPage = () => {
 
 // ─── Class Card ───────────────────────────────────────────────────────────────
 const ClassCard = ({ cls, subjects, onEdit }) => (
-    <div style={{
-        border: "1px solid var(--border, #e5e7eb)",
-        borderRadius: "10px",
-        padding: "14px",
-        display: "flex",
-        flexDirection: "column",
-        gap: "8px",
-        background: "var(--bg-primary, #fff)"
-    }}>
+    <div style={{ border: "1px solid var(--border)", borderRadius: "10px", padding: "14px", display: "flex", flexDirection: "column", gap: "8px", background: "rgba(255,255,255,0.02)" }}>
         <div style={{ fontWeight: 700, fontSize: "13px" }}>{cls}</div>
-        <div style={{ fontSize: "12px", color: "#888" }}>
+        <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>
             {subjects.length} subject{subjects.length !== 1 ? "s" : ""}
         </div>
         <button className="btn btn-sm" style={{ width: "100%", marginTop: "4px" }} onClick={onEdit}>
@@ -823,18 +953,8 @@ const ClassCard = ({ cls, subjects, onEdit }) => (
 
 // ─── Modal Wrapper ────────────────────────────────────────────────────────────
 const Modal = ({ title, onClose, children }) => (
-    <div style={{
-        position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
-        background: "rgba(0,0,0,0.5)", zIndex: 1000,
-        display: "flex", alignItems: "center", justifyContent: "center"
-    }}>
-        <div style={{
-            background: "var(--bg-primary, #fff)",
-            borderRadius: "12px", padding: "32px",
-            width: "100%", maxWidth: "520px",
-            maxHeight: "85vh", overflowY: "auto",
-            boxShadow: "0 20px 60px rgba(0,0,0,0.3)"
-        }}>
+    <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.6)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ background: "var(--surface)", borderRadius: "12px", padding: "32px", width: "100%", maxWidth: "520px", maxHeight: "85vh", overflowY: "auto", boxShadow: "0 20px 60px rgba(0,0,0,0.4)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
                 <h3 style={{ margin: 0, fontSize: "16px" }}>{title}</h3>
                 <button className="btn btn-sm" onClick={onClose}>✕</button>
@@ -844,13 +964,13 @@ const Modal = ({ title, onClose, children }) => (
     </div>
 );
 
-// ─── Class Subject Manager (inside modal) ─────────────────────────────────────
+// ─── Class Subject Manager ────────────────────────────────────────────────────
 const ClassSubjectManager = ({ classId, subjects, onSuccess, onClose }) => {
-    const [showForm, setShowForm] = useState(false);
+    const [showForm, setShowForm]     = useState(false);
     const [editSubject, setEditSubject] = useState(null);
-    const [formData, setFormData] = useState({ SubjectName: "", SubjectCode: "" });
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
+    const [formData, setFormData]     = useState({ SubjectName: "", SubjectCode: "" });
+    const [loading, setLoading]       = useState(false);
+    const [error, setError]           = useState("");
 
     const handleEdit = (subject) => {
         setEditSubject(subject);
@@ -904,15 +1024,10 @@ const ClassSubjectManager = ({ classId, subjects, onSuccess, onClose }) => {
             {subjects.length > 0 ? (
                 <div style={{ marginBottom: "16px" }}>
                     {subjects.map(s => (
-                        <div key={s._id} style={{
-                            display: "flex", justifyContent: "space-between",
-                            alignItems: "center", padding: "10px 12px",
-                            border: "1px solid var(--border, #e5e7eb)",
-                            borderRadius: "8px", marginBottom: "8px"
-                        }}>
+                        <div key={s._id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 12px", border: "1px solid var(--border)", borderRadius: "8px", marginBottom: "8px" }}>
                             <div>
                                 <div style={{ fontWeight: 600, fontSize: "14px" }}>{s.SubjectName}</div>
-                                <div style={{ fontSize: "12px", color: "#888" }}>{s.SubjectCode}</div>
+                                <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>{s.SubjectCode}</div>
                             </div>
                             <div className="action-btns">
                                 <button className="btn btn-sm" onClick={() => handleEdit(s)}>Edit</button>
@@ -922,7 +1037,7 @@ const ClassSubjectManager = ({ classId, subjects, onSuccess, onClose }) => {
                     ))}
                 </div>
             ) : (
-                <p style={{ color: "#aaa", fontSize: "13px", marginBottom: "16px" }}>No subjects added yet.</p>
+                <p style={{ color: "var(--text-muted)", fontSize: "13px", marginBottom: "16px" }}>No subjects added yet.</p>
             )}
 
             {showForm ? (
@@ -966,12 +1081,12 @@ const ClassSubjectManager = ({ classId, subjects, onSuccess, onClose }) => {
     );
 };
 
-// ─── Student Subject Manager (inside modal) ───────────────────────────────────
+// ─── Student Subject Manager ──────────────────────────────────────────────────
 const StudentSubjectManager = ({ student, classSubjects, onSuccess, onCancel }) => {
-    const [selected, setSelected] = useState(student.Subjects || []);
-    const [customCode, setCustomCode] = useState("");
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
+    const [selected, setSelected]       = useState(student.Subjects || []);
+    const [customCode, setCustomCode]   = useState("");
+    const [loading, setLoading]         = useState(false);
+    const [error, setError]             = useState("");
     const [addingCustom, setAddingCustom] = useState(false);
 
     const toggleSubject = (code) => {
@@ -981,14 +1096,8 @@ const StudentSubjectManager = ({ student, classSubjects, onSuccess, onCancel }) 
     };
 
     const handleAddCustom = () => {
-        if (!customCode.trim()) {
-            setError("Subject code is required.");
-            return;
-        }
-        if (selected.includes(customCode.trim())) {
-            setError("Subject already added.");
-            return;
-        }
+        if (!customCode.trim()) { setError("Subject code is required."); return; }
+        if (selected.includes(customCode.trim())) { setError("Subject already added."); return; }
         setSelected(prev => [...prev, customCode.trim()]);
         setCustomCode("");
         setAddingCustom(false);
@@ -999,9 +1108,7 @@ const StudentSubjectManager = ({ student, classSubjects, onSuccess, onCancel }) 
         setError("");
         setLoading(true);
         try {
-            await axios.put(`${API}/students/updateSubjects/${student._id}`, {
-                Subjects: selected
-            });
+            await axios.put(`${API}/students/updateSubjects/${student._id}`, { Subjects: selected });
             onSuccess();
         } catch (err) {
             setError(err.response?.data?.message || "Failed to update subjects.");
@@ -1012,21 +1119,14 @@ const StudentSubjectManager = ({ student, classSubjects, onSuccess, onCancel }) 
 
     return (
         <div>
-            <p style={{ fontSize: "13px", color: "#666", marginBottom: "16px" }}>
+            <p style={{ fontSize: "13px", color: "var(--text-secondary)", marginBottom: "16px" }}>
                 Class: <strong>{student.ClassId}</strong> — select subjects from the list below.
             </p>
-
             {error && <div className="alert alert-error" style={{ marginBottom: "12px" }}>⚠ {error}</div>}
 
             <div style={{ marginBottom: "16px" }}>
                 {classSubjects.map(s => (
-                    <label key={s._id} style={{
-                        display: "flex", alignItems: "center", gap: "10px",
-                        padding: "10px 12px", marginBottom: "8px",
-                        border: `1px solid ${selected.includes(s.SubjectCode) ? "var(--accent, #2563eb)" : "var(--border, #e5e7eb)"}`,
-                        borderRadius: "8px", cursor: "pointer",
-                        background: selected.includes(s.SubjectCode) ? "var(--accent-light, #eff6ff)" : "transparent"
-                    }}>
+                    <label key={s._id} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", marginBottom: "8px", border: `1px solid ${selected.includes(s.SubjectCode) ? "var(--accent)" : "var(--border)"}`, borderRadius: "8px", cursor: "pointer", background: selected.includes(s.SubjectCode) ? "rgba(232,93,10,0.08)" : "transparent" }}>
                         <input
                             type="checkbox"
                             checked={selected.includes(s.SubjectCode)}
@@ -1034,14 +1134,14 @@ const StudentSubjectManager = ({ student, classSubjects, onSuccess, onCancel }) 
                         />
                         <div>
                             <div style={{ fontWeight: 600, fontSize: "14px" }}>{s.SubjectName}</div>
-                            <div style={{ fontSize: "12px", color: "#888" }}>{s.SubjectCode}</div>
+                            <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>{s.SubjectCode}</div>
                         </div>
                     </label>
                 ))}
             </div>
 
             {addingCustom ? (
-                <div style={{ border: "1px dashed #ccc", borderRadius: "8px", padding: "12px", marginBottom: "16px" }}>
+                <div style={{ border: "1px dashed var(--border)", borderRadius: "8px", padding: "12px", marginBottom: "16px" }}>
                     <div className="form-group" style={{ marginBottom: "8px" }}>
                         <label>Subject Code</label>
                         <input
@@ -1058,11 +1158,7 @@ const StudentSubjectManager = ({ student, classSubjects, onSuccess, onCancel }) 
                     </div>
                 </div>
             ) : (
-                <button
-                    className="btn btn-sm"
-                    style={{ width: "100%", marginBottom: "16px" }}
-                    onClick={() => setAddingCustom(true)}
-                >
+                <button className="btn btn-sm" style={{ width: "100%", marginBottom: "16px" }} onClick={() => setAddingCustom(true)}>
                     + Add Custom Subject
                 </button>
             )}

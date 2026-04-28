@@ -272,6 +272,61 @@ body {
     background: #ffffff;
 }
 
+.form-row {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+}
+
+.form-row .form-group {
+    flex: 1; /* Allows Gender and DOB to share width equally */
+}
+
+/* --- Styling for Select and Date inputs --- */
+.form-group select,
+.form-group input[type="date"] {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-family: var(--font-sans);
+    color: var(--color-text-primary);
+    background: #f9f9f9;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    appearance: none; /* Removes default browser styling for a cleaner look */
+}
+
+/* Custom dropdown arrow for select */
+.form-group select {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 14px;
+    padding-right: 32px;
+}
+
+.form-group select:focus,
+.form-group input[type="date"]:focus {
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-focus);
+    background: #ffffff;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 480px) {
+    .form-row {
+        flex-direction: column; /* Stack them on very small screens */
+        gap: 14px;
+    }
+}
+
+/* Adjusting the auth-container height slightly for the extra fields */
+.auth-container {
+    min-height: 580px; /* Increased from 520px to fit extra fields comfortably */
+}
+
 /* --- Submit Button --------------------------------------- */
 .btn-submit {
     width: 100%;
