@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import HelpPage from '../../components/HelpPage';
 import '../../style/StudentDashboard.css';
 
 const StudentDashboard = ({ logout, userEmail }) => {
@@ -40,12 +41,22 @@ const StudentDashboard = ({ logout, userEmail }) => {
                 </svg>
             )
         },
+        {
+            id: 'help', label: 'Help', icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                    <line x1="12" y1="17" x2="12.01" y2="17" />
+                </svg>
+            )
+        },
     ];
 
     const pageTitles = {
-        overview: { title: 'My Dashboard', breadcrumb: 'Student / Overview' },
-        results:  { title: 'My Results',   breadcrumb: 'Student / Results'  },
-        profile:  { title: 'My Profile',   breadcrumb: 'Student / Profile'  },
+        overview: { title: 'My Dashboard',    breadcrumb: 'Student / Overview' },
+        results:  { title: 'My Results',      breadcrumb: 'Student / Results'  },
+        profile:  { title: 'My Profile',      breadcrumb: 'Student / Profile'  },
+        help:     { title: 'Help & Support',  breadcrumb: 'Student / Help'     },
     };
 
     return (
@@ -98,18 +109,22 @@ const StudentDashboard = ({ logout, userEmail }) => {
                     {activePage === 'overview' && <OverviewPage />}
                     {activePage === 'results'  && <MyResultsPage />}
                     {activePage === 'profile'  && <ProfilePage userEmail={userEmail} />}
+                    {activePage === 'help'     && <HelpPage />}
                 </div>
             </main>
         </div>
     );
 };
 
+/* =========================================================
+   OVERVIEW PAGE
+   ========================================================= */
 const OverviewPage = () => {
     const statCards = [
-        { label: 'Overall Score',  value: '82%',  delta: '↑ 4% from last term',  deltaClass: 'up', icon: '📈', iconClass: 'icon-green' },
-        { label: 'Subjects',       value: '6',    delta: 'All results available', deltaClass: 'up', icon: '📚', iconClass: 'icon-blue'  },
-        { label: 'Best Subject',   value: 'Math', delta: 'Score: 95',             deltaClass: 'up', icon: '🏆', iconClass: 'icon-amber' },
-        { label: 'Result Status',  value: 'Pass', delta: 'Congratulations!',      deltaClass: 'up', icon: '🎓', iconClass: 'icon-rose'  },
+        { label: 'Overall Score', value: '82%',  delta: '↑ 4% from last term',  deltaClass: 'up', icon: '📈', iconClass: 'icon-green' },
+        { label: 'Subjects',      value: '6',    delta: 'All results available', deltaClass: 'up', icon: '📚', iconClass: 'icon-blue'  },
+        { label: 'Best Subject',  value: 'Math', delta: 'Score: 95',             deltaClass: 'up', icon: '🏆', iconClass: 'icon-amber' },
+        { label: 'Result Status', value: 'Pass', delta: 'Congratulations!',      deltaClass: 'up', icon: '🎓', iconClass: 'icon-rose'  },
     ];
 
     const subjects = [
@@ -173,7 +188,7 @@ const OverviewPage = () => {
                                                 <div
                                                     className={`progress-fill ${getFillClass(row.marks)}`}
                                                     style={{ width: `${row.marks}%` }}
-                                                ></div>
+                                                />
                                             </div>
                                         </div>
                                     </td>
@@ -190,16 +205,19 @@ const OverviewPage = () => {
     );
 };
 
+/* =========================================================
+   MY RESULTS PAGE
+   ========================================================= */
 const MyResultsPage = () => {
     const details = [
-        ['Student Name', 'Anjali Rao'],
-        ['Roll ID', 'S4821'],
-        ['Class', 'General'],
-        ['Academic Year', '2025–26'],
-        ['Total Marks', '485 / 600'],
-        ['Percentage', '80.8%'],
-        ['Grade', 'A'],
-        ['Result', 'PASS'],
+        ['Student Name',  'Anjali Rao'  ],
+        ['Roll ID',       'S4821'       ],
+        ['Class',         'General'     ],
+        ['Academic Year', '2025–26'     ],
+        ['Total Marks',   '485 / 600'   ],
+        ['Percentage',    '80.8%'       ],
+        ['Grade',         'A'           ],
+        ['Result',        'PASS'        ],
     ];
 
     return (
@@ -234,14 +252,44 @@ const MyResultsPage = () => {
     );
 };
 
+/* =========================================================
+   PROFILE PAGE
+   ========================================================= */
 const ProfilePage = ({ userEmail }) => {
-    const fields = [
-        { label: 'Full Name',      value: 'Anjali Rao',                    name: 'fullName' },
-        { label: 'Email Address',  value: userEmail || 'student@srms.com', name: 'email'    },
-        { label: 'Roll ID',        value: 'S4821',                         name: 'rollId'   },
-        { label: 'Class',          value: 'General',                       name: 'class'    },
-        { label: 'Date of Birth',  value: '2000-01-01',                    name: 'dob'      },
-        { label: 'Gender',         value: 'Other',                         name: 'gender'   },
+    const initialFields = {
+        fullName: 'Anjali Rao',
+        email:    userEmail || 'student@srms.com',
+        rollId:   'S4821',
+        class:    'General',
+        dob:      '2000-01-01',
+        gender:   'Other',
+    };
+
+    const [isEditing, setIsEditing] = useState(false);
+    const [formData, setFormData]   = useState(initialFields);
+    const [saved, setSaved]         = useState(initialFields);
+
+    const handleChange = (e) =>
+        setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+
+    const handleSave = () => {
+        // TODO: POST formData to your API
+        setSaved(formData);
+        setIsEditing(false);
+    };
+
+    const handleCancel = () => {
+        setFormData(saved);
+        setIsEditing(false);
+    };
+
+    const fieldLabels = [
+        { label: 'Full Name',     name: 'fullName', editable: true  },
+        { label: 'Email Address', name: 'email',    editable: true  },
+        { label: 'Roll ID',       name: 'rollId',   editable: false },
+        { label: 'Class',         name: 'class',    editable: false },
+        { label: 'Date of Birth', name: 'dob',      editable: true  },
+        { label: 'Gender',        name: 'gender',   editable: true  },
     ];
 
     return (
@@ -253,27 +301,34 @@ const ProfilePage = ({ userEmail }) => {
             <div className="section-card">
                 <div className="section-header">
                     <h3 className="section-title">Account Information</h3>
-                    <button className="btn btn-sm">Edit Profile</button>
+                    {!isEditing && (
+                        <button className="btn btn-sm" onClick={() => setIsEditing(true)}>
+                            Edit Profile
+                        </button>
+                    )}
                 </div>
                 <div className="form-section">
                     <div className="form-grid">
-                        {fields.map(field => (
+                        {fieldLabels.map(field => (
                             <div className="form-group" key={field.name}>
                                 <label>{field.label}</label>
                                 <input
                                     type="text"
-                                    defaultValue={field.value}
-                                    disabled
-                                    readOnly
+                                    name={field.name}
+                                    value={formData[field.name]}
+                                    onChange={handleChange}
+                                    disabled={!isEditing || !field.editable}
                                 />
                             </div>
                         ))}
                     </div>
                 </div>
-                <div className="form-actions">
-                    <button className="btn">Cancel</button>
-                    <button className="btn btn-primary">Save Changes</button>
-                </div>
+                {isEditing && (
+                    <div className="form-actions">
+                        <button className="btn" onClick={handleCancel}>Cancel</button>
+                        <button className="btn btn-primary" onClick={handleSave}>Save Changes</button>
+                    </div>
+                )}
             </div>
         </>
     );
