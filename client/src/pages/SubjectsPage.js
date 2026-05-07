@@ -563,26 +563,15 @@ const CLASSES = [
 
 // ─── Skeletons ────────────────────────────────────────────────────────────────
 const ClassCardsSkeleton = () => (
-    <>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: "12px", marginBottom: "12px" }}>
-            {[1, 2, 3, 4, 5, 6].map(i => (
-                <div key={i} style={{ border: "1px solid var(--border)", borderRadius: 10, padding: 14 }}>
-                    <div className="skeleton skeleton-text" style={{ width: "70%", marginBottom: 8 }} />
-                    <div className="skeleton skeleton-text" style={{ width: "40%", marginBottom: 10 }} />
-                    <div className="skeleton skeleton-btn" style={{ width: "100%" }} />
-                </div>
-            ))}
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: "12px" }}>
-            {[1, 2, 3, 4, 5, 6].map(i => (
-                <div key={i} style={{ border: "1px solid var(--border)", borderRadius: 10, padding: 14 }}>
-                    <div className="skeleton skeleton-text" style={{ width: "70%", marginBottom: 8 }} />
-                    <div className="skeleton skeleton-text" style={{ width: "40%", marginBottom: 10 }} />
-                    <div className="skeleton skeleton-btn" style={{ width: "100%" }} />
-                </div>
-            ))}
-        </div>
-    </>
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: "12px", marginBottom: "12px" }}>
+        {[1, 2, 3, 4, 5, 6].map(i => (
+            <div key={i} style={{ border: "1px solid var(--border)", borderRadius: 10, padding: 14 }}>
+                <div className="skeleton skeleton-text" style={{ width: "70%", marginBottom: 8 }} />
+                <div className="skeleton skeleton-text" style={{ width: "40%", marginBottom: 10 }} />
+                <div className="skeleton skeleton-btn" style={{ width: "100%" }} />
+            </div>
+        ))}
+    </div>
 );
 
 const StudentsTableSkeleton = () => (
@@ -615,7 +604,6 @@ const StudentsTableSkeleton = () => (
                             <div style={{ display: "flex", gap: 6 }}>
                                 <div className="skeleton" style={{ width: 60, height: 22, borderRadius: 12 }} />
                                 <div className="skeleton" style={{ width: 70, height: 22, borderRadius: 12 }} />
-                                <div className="skeleton" style={{ width: 55, height: 22, borderRadius: 12 }} />
                             </div>
                         </td>
                         <td><div className="skeleton skeleton-btn" style={{ width: 100 }} /></td>
@@ -628,18 +616,18 @@ const StudentsTableSkeleton = () => (
 
 // ─── Subjects Page ────────────────────────────────────────────────────────────
 const SubjectsPage = () => {
-    const [subjects, setSubjects]   = useState([]);
-    const [students, setStudents]   = useState([]);
-    const [loading, setLoading]     = useState(true);
-    const [error, setError]         = useState("");
+    const [subjects, setSubjects] = useState([]);
+    const [students, setStudents] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
 
-    const [classModal, setClassModal]         = useState(false);
+    const [classModal, setClassModal] = useState(false);
     const [classModalData, setClassModalData] = useState(null);
-    const [studentModal, setStudentModal]     = useState(false);
+    const [studentModal, setStudentModal] = useState(false);
     const [studentModalData, setStudentModalData] = useState(null);
 
     const [selectedClass, setSelectedClass] = useState("All");
-    const [search, setSearch]               = useState("");
+    const [search, setSearch] = useState("");
 
     const fetchData = async () => {
         try {
@@ -660,52 +648,37 @@ const SubjectsPage = () => {
 
     useEffect(() => { fetchData(); }, []);
 
-    const openClassModal   = (classId) => { setClassModalData({ classId }); setClassModal(true); };
-    const closeClassModal  = ()        => { setClassModal(false); setClassModalData(null); };
-    const openStudentModal = (student) => { setStudentModalData(student); setStudentModal(true); };
-    const closeStudentModal = ()       => { setStudentModal(false); setStudentModalData(null); };
-
-<<<<<<< HEAD
-    const closeClassModal = () => {
-        setClassModal(false);
-        setClassModalData(null);
+    // ── Modal Actions ──
+    const openClassModal = (classId) => { 
+        setClassModalData({ classId }); 
+        setClassModal(true); 
+    };
+    
+    const closeClassModal = () => { 
+        setClassModal(false); 
+        setClassModalData(null); 
     };
 
-    // ── Student subject actions ──
-    const openStudentModal = (student) => {
-        setStudentModalData(student);
-        setStudentModal(true);
+    const openStudentModal = (student) => { 
+        setStudentModalData(student); 
+        setStudentModal(true); 
     };
 
-    const closeStudentModal = () => {
-        setStudentModal(false);
-        setStudentModalData(null);
+    const closeStudentModal = () => { 
+        setStudentModal(false); 
+        setStudentModalData(null); 
     };
 
     // ── Derived data ──
     const getClassSubjects = (classId) => subjects.filter(s => s.ClassId === classId);
 
     const filteredStudents = students.filter(s => {
-        // Updated logic to ensure "All" shows everyone regardless of subject status
         const matchClass = selectedClass === "All" || s.ClassId === selectedClass;
         const matchSearch =
             (s.StudentName?.toLowerCase().includes(search.toLowerCase()) ||
-            s.RollId?.toLowerCase().includes(search.toLowerCase()) ||
-            s.StudentEmail?.toLowerCase().includes(search.toLowerCase()));
-        
+                s.RollId?.toLowerCase().includes(search.toLowerCase()) ||
+                s.StudentEmail?.toLowerCase().includes(search.toLowerCase()));
         return matchClass && matchSearch;
-=======
-    const getClassSubjects = (classId) => subjects.filter(s => s.ClassId === classId);
-
-    const filteredStudents = students.filter(s => {
-        const hasSubjects  = s.Subjects && s.Subjects.length > 0;
-        const matchClass   = selectedClass === "All" || s.ClassId === selectedClass;
-        const matchSearch  =
-            s.StudentName?.toLowerCase().includes(search.toLowerCase())  ||
-            s.RollId?.toLowerCase().includes(search.toLowerCase())       ||
-            s.StudentEmail?.toLowerCase().includes(search.toLowerCase());
-        return hasSubjects && matchClass && matchSearch;
->>>>>>> 756f1b8 (Update theme for admin management dashboard)
     });
 
     const getAvatar = (name) =>
@@ -719,7 +692,6 @@ const SubjectsPage = () => {
                         <h1>Subjects Management</h1>
                         <p>Manage class subjects and student subject assignments.</p>
                     </div>
-                    {/* NEW: Assign Subject Button */}
                     <button className="btn btn-primary" onClick={() => openClassModal("Class 1")}>
                         + Assign Subject
                     </button>
@@ -736,45 +708,19 @@ const SubjectsPage = () => {
                         <p className="section-meta">Click Edit to manage subjects for each class</p>
                     </div>
                 </div>
-<<<<<<< HEAD
 
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: "12px" }}>
-                    {CLASSES.map(cls => (
-                        <ClassCard
-                            key={cls}
-                            cls={cls}
-                            subjects={getClassSubjects(cls)}
-                            onEdit={() => openClassModal(cls)}
-                        />
-                    ))}
-=======
-                <div style={{ padding: "16px 20px" }}>
-                    {loading ? <ClassCardsSkeleton /> : (
-                        <>
-                            <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: "12px", marginBottom: "12px" }}>
-                                {CLASSES.slice(0, 6).map(cls => (
-                                    <ClassCard
-                                        key={cls}
-                                        cls={cls}
-                                        subjects={getClassSubjects(cls)}
-                                        onEdit={() => openClassModal(cls)}
-                                    />
-                                ))}
-                            </div>
-                            <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: "12px" }}>
-                                {CLASSES.slice(6, 12).map(cls => (
-                                    <ClassCard
-                                        key={cls}
-                                        cls={cls}
-                                        subjects={getClassSubjects(cls)}
-                                        onEdit={() => openClassModal(cls)}
-                                    />
-                                ))}
-                            </div>
-                        </>
-                    )}
->>>>>>> 756f1b8 (Update theme for admin management dashboard)
-                </div>
+                {loading ? <ClassCardsSkeleton /> : (
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: "12px" }}>
+                        {CLASSES.map(cls => (
+                            <ClassCard
+                                key={cls}
+                                cls={cls}
+                                subjects={getClassSubjects(cls)}
+                                onEdit={() => openClassModal(cls)}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
 
             {/* ── Students Table ── */}
@@ -783,6 +729,7 @@ const SubjectsPage = () => {
                     <h3 className="section-title">Students & Subject Assignment</h3>
                     <p className="section-meta">{filteredStudents.length} student{filteredStudents.length !== 1 ? "s" : ""} shown</p>
                 </div>
+                
                 <div className="filter-bar">
                     <input
                         type="text"
@@ -814,7 +761,7 @@ const SubjectsPage = () => {
                             <tbody>
                                 {filteredStudents.length > 0 ? (
                                     filteredStudents.map(s => {
-                                        const classSubjects    = getClassSubjects(s.ClassId);
+                                        const classSubjects = getClassSubjects(s.ClassId);
                                         const assignedSubjects = s.Subjects || [];
                                         return (
                                             <tr key={s._id}>
@@ -826,51 +773,6 @@ const SubjectsPage = () => {
                                                             <div className="student-id">{s.StudentEmail}</div>
                                                         </div>
                                                     </div>
-<<<<<<< HEAD
-                                                </div>
-                                            </td>
-                                            <td>{s.RollId}</td>
-                                            <td>{s.ClassId || "—"}</td>
-                                            <td>
-                                                {assignedSubjects.length > 0 ? (
-                                                    <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
-                                                        {assignedSubjects.map(code => {
-                                                            const sub = subjects.find(su => su.SubjectCode === code);
-                                                            return (
-                                                                <span key={code} className="pill pill-info" style={{ fontSize: '10px' }}>
-                                                                    {sub ? sub.SubjectName : code}
-                                                                </span>
-                                                            );
-                                                        })}
-                                                    </div>
-                                                ) : (
-                                                    <span style={{ color: "#aaa", fontSize: "12px" }}>
-                                                        {classSubjects.length === 0
-                                                            ? "No subjects in this class"
-                                                            : "None assigned"}
-                                                    </span>
-                                                )}
-                                            </td>
-                                            <td>
-                                                <button
-                                                    className="btn btn-sm"
-                                                    onClick={() => openStudentModal(s)}
-                                                    disabled={classSubjects.length === 0}
-                                                    title={classSubjects.length === 0 ? "Add subjects to this class first" : "Edit subjects"}
-                                                >
-                                                    Edit Subjects
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    );
-                                })
-                            ) : (
-                                <tr><td colSpan="5" className="table-status-msg">No students found.</td></tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-=======
                                                 </td>
                                                 <td>{s.RollId}</td>
                                                 <td>{s.ClassId || "—"}</td>
@@ -880,14 +782,14 @@ const SubjectsPage = () => {
                                                             {assignedSubjects.map(code => {
                                                                 const sub = subjects.find(su => su.SubjectCode === code);
                                                                 return (
-                                                                    <span key={code} style={{ padding: "2px 8px", background: "rgba(59,130,246,0.15)", borderRadius: "12px", fontSize: "11px", color: "#60a5fa" }}>
+                                                                    <span key={code} className="pill pill-info" style={{ fontSize: '10px' }}>
                                                                         {sub ? sub.SubjectName : code}
                                                                     </span>
                                                                 );
                                                             })}
                                                         </div>
                                                     ) : (
-                                                        <span style={{ color: "var(--text-muted)", fontSize: "12px" }}>
+                                                        <span style={{ color: "#aaa", fontSize: "12px" }}>
                                                             {classSubjects.length === 0 ? "No subjects in this class" : "None assigned"}
                                                         </span>
                                                     )}
@@ -898,7 +800,9 @@ const SubjectsPage = () => {
                                                         onClick={() => openStudentModal(s)}
                                                         disabled={classSubjects.length === 0}
                                                         title={classSubjects.length === 0 ? "Add subjects to this class first" : "Edit subjects"}
-                                                    >Edit Subjects</button>
+                                                    >
+                                                        Edit Subjects
+                                                    </button>
                                                 </td>
                                             </tr>
                                         );
@@ -910,7 +814,6 @@ const SubjectsPage = () => {
                         </table>
                     </div>
                 )}
->>>>>>> 756f1b8 (Update theme for admin management dashboard)
             </div>
 
             {/* ── Modals ── */}
@@ -924,6 +827,7 @@ const SubjectsPage = () => {
                     />
                 </Modal>
             )}
+
             {studentModal && studentModalData && (
                 <Modal title={`Edit Subjects — ${studentModalData.StudentName}`} onClose={closeStudentModal}>
                     <StudentSubjectManager
@@ -938,7 +842,8 @@ const SubjectsPage = () => {
     );
 };
 
-// ─── Class Card ───────────────────────────────────────────────────────────────
+// ─── Sub-Components ───────────────────────────────────────────────────────────
+
 const ClassCard = ({ cls, subjects, onEdit }) => (
     <div style={{ border: "1px solid var(--border)", borderRadius: "10px", padding: "14px", display: "flex", flexDirection: "column", gap: "8px", background: "rgba(255,255,255,0.02)" }}>
         <div style={{ fontWeight: 700, fontSize: "13px" }}>{cls}</div>
@@ -951,7 +856,6 @@ const ClassCard = ({ cls, subjects, onEdit }) => (
     </div>
 );
 
-// ─── Modal Wrapper ────────────────────────────────────────────────────────────
 const Modal = ({ title, onClose, children }) => (
     <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.6)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center" }}>
         <div style={{ background: "var(--surface)", borderRadius: "12px", padding: "32px", width: "100%", maxWidth: "520px", maxHeight: "85vh", overflowY: "auto", boxShadow: "0 20px 60px rgba(0,0,0,0.4)" }}>
@@ -964,13 +868,12 @@ const Modal = ({ title, onClose, children }) => (
     </div>
 );
 
-// ─── Class Subject Manager ────────────────────────────────────────────────────
 const ClassSubjectManager = ({ classId, subjects, onSuccess, onClose }) => {
-    const [showForm, setShowForm]     = useState(false);
+    const [showForm, setShowForm] = useState(false);
     const [editSubject, setEditSubject] = useState(null);
-    const [formData, setFormData]     = useState({ SubjectName: "", SubjectCode: "" });
-    const [loading, setLoading]       = useState(false);
-    const [error, setError]           = useState("");
+    const [formData, setFormData] = useState({ SubjectName: "", SubjectCode: "" });
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
 
     const handleEdit = (subject) => {
         setEditSubject(subject);
@@ -1051,7 +954,6 @@ const ClassSubjectManager = ({ classId, subjects, onSuccess, onClose }) => {
                             value={formData.SubjectName}
                             onChange={e => setFormData({ ...formData, SubjectName: e.target.value })}
                             required
-                            autoFocus
                         />
                     </div>
                     <div className="form-group" style={{ marginBottom: "16px" }}>
@@ -1081,12 +983,11 @@ const ClassSubjectManager = ({ classId, subjects, onSuccess, onClose }) => {
     );
 };
 
-// ─── Student Subject Manager ──────────────────────────────────────────────────
 const StudentSubjectManager = ({ student, classSubjects, onSuccess, onCancel }) => {
-    const [selected, setSelected]       = useState(student.Subjects || []);
-    const [customCode, setCustomCode]   = useState("");
-    const [loading, setLoading]         = useState(false);
-    const [error, setError]             = useState("");
+    const [selected, setSelected] = useState(student.Subjects || []);
+    const [customCode, setCustomCode] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
     const [addingCustom, setAddingCustom] = useState(false);
 
     const toggleSubject = (code) => {
@@ -1149,7 +1050,6 @@ const StudentSubjectManager = ({ student, classSubjects, onSuccess, onCancel }) 
                             placeholder="e.g. EXTRA-101"
                             value={customCode}
                             onChange={e => setCustomCode(e.target.value)}
-                            autoFocus
                         />
                     </div>
                     <div className="form-actions">
