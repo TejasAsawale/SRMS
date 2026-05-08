@@ -644,10 +644,313 @@
 
 // export default StudentDashboard;
 
-import React, { useState } from 'react';
+// import React, { useState } from 'react';
+// import { useNavigate } from 'react-router-dom';
+// import HelpPage from '../../components/HelpPage';
+// import '../../style/StudentDashboard.css';
+
+// /* =========================================================
+//    PDF GENERATOR — Styled Academic Report
+//    ========================================================= */
+// const exportStudentPDF = (studentData) => {
+//     const { fullName, rollId, class: classId, subjects, percentage, totalMarks, maxMarks } = studentData;
+
+//     let overallFail = false;
+//     const subjectRows = subjects.map(sub => {
+//         const marks = Number(sub.marks);
+//         const passed = marks >= 35;
+//         if (!passed) overallFail = true;
+//         return { ...sub, passed };
+//     });
+
+//     const resultStatus = overallFail ? 'FAIL' : 'PASS';
+
+//     const html = `
+//         <html>
+//             <head>
+//                 <style>
+//                     * { box-sizing: border-box; margin: 0; padding: 0; }
+//                     body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f4f4; display: flex; justify-content: center; padding: 30px 0; }
+//                     .report-card { background: #fff; width: 720px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.12); padding-bottom: 30px; }
+//                     .top-accent-bar { height: 10px; background: #6b0f1a; }
+//                     .report-header { display: flex; justify-content: space-between; padding: 28px 36px; border-bottom: 2px solid #e8e0e0; }
+//                     .school-branding h1 { font-size: 24px; color: #6b0f1a; text-transform: uppercase; }
+//                     .student-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 24px 36px; padding: 18px; background: #fdf8f8; border: 1px solid #e8dede; }
+//                     .marks-table { width: calc(100% - 72px); margin: 0 36px; border-collapse: collapse; }
+//                     .marks-table thead { background: #6b0f1a; color: #fff; }
+//                     .marks-table th, .marks-table td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+//                     .status-pass { color: green; font-weight: bold; }
+//                     .status-fail { color: red; font-weight: bold; }
+//                     .footer-summary { display: flex; justify-content: space-between; margin: 28px 36px; }
+//                     .badge { padding: 15px; border-radius: 8px; border: 2px solid; text-align: center; width: 150px; }
+//                     .badge-pass { background: #f0fdf4; border-color: #86efac; color: #166534; }
+//                     .badge-fail { background: #fef2f2; border-color: #fca5a5; color: #991b1b; }
+//                     @media print { body { background: #fff; } .report-card { box-shadow: none; } }
+//                 </style>
+//             </head>
+//             <body>
+//                 <div class="report-card">
+//                     <div class="top-accent-bar"></div>
+//                     <div class="report-header">
+//                         <div class="school-branding">
+//                             <h1>Academic Progress Report</h1>
+//                             <p>SRMS Portal | Annual Session 2025-26</p>
+//                         </div>
+//                         <div style="font-size: 40px;">🎓</div>
+//                     </div>
+//                     <div class="student-info-grid">
+//                         <div><strong>Name:</strong> ${fullName}</div>
+//                         <div><strong>Roll ID:</strong> ${rollId}</div>
+//                         <div><strong>Class:</strong> ${classId}</div>
+//                         <div><strong>Result:</strong> ${resultStatus}</div>
+//                     </div>
+//                     <table class="marks-table">
+//                         <thead>
+//                             <tr><th>Subject</th><th>Max</th><th>Obtained</th><th>Status</th></tr>
+//                         </thead>
+//                         <tbody>
+//                             ${subjectRows.map(r => `
+//                                 <tr>
+//                                     <td>${r.name}</td>
+//                                     <td>100</td>
+//                                     <td>${r.marks}</td>
+//                                     <td class="${r.passed ? 'status-pass' : 'status-fail'}">${r.passed ? 'Pass' : 'Fail'}</td>
+//                                 </tr>
+//                             `).join('')}
+//                         </tbody>
+//                     </table>
+//                     <div class="footer-summary">
+//                         <div class="badge ${overallFail ? 'badge-fail' : 'badge-pass'}">
+//                             <div style="font-size: 10px;">FINAL RESULT</div>
+//                             <div style="font-size: 20px; font-weight: 800;">${resultStatus}</div>
+//                         </div>
+//                         <div style="text-align: right;">
+//                             <div><strong>Aggregate:</strong> ${totalMarks} / ${maxMarks}</div>
+//                             <div><strong>Percentage:</strong> ${percentage}%</div>
+//                         </div>
+//                     </div>
+//                 </div>
+//             </body>
+//         </html>
+//     `;
+
+//     const win = window.open('', '_blank');
+//     win.document.write(html);
+//     win.document.close();
+//     win.onload = () => setTimeout(() => win.print(), 500);
+// };
+
+// /* --- Main Dashboard Component --- */
+// const StudentDashboard = ({ logout, userEmail }) => {
+//     const [userData, setUserData] = useState({
+//         fullName: 'Aditya Shelke',
+//         email: userEmail || 'anjali.rao@example.com',
+//         rollId: 'S4821',
+//         class: 'Class 10',
+//         dob: '2005-06-15',
+//         gender: 'Male',
+//         profileImg: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'
+//     });
+
+//     const [activePage, setActivePage] = useState('overview');
+//     const navigate = useNavigate();
+
+//     const subjects = [
+//         { id: 1, name: 'Mathematics', marks: 95, total: 100, grade: 'A+' },
+//         { id: 2, name: 'Science', marks: 88, total: 100, grade: 'A' },
+//         { id: 3, name: 'English', marks: 76, total: 100, grade: 'B+' },
+//         { id: 4, name: 'Social Studies', marks: 45, total: 100, grade: 'C' },
+//         { id: 5, name: 'Computer Science', marks: 91, total: 100, grade: 'A+' },
+//     ];
+
+//     const totalMarks = subjects.reduce((acc, s) => acc + s.marks, 0);
+//     const maxMarks = subjects.length * 100;
+//     const percentage = ((totalMarks / maxMarks) * 100).toFixed(1);
+//     const isPassed = percentage >= 40;
+
+//     const handleLogout = () => {
+//         logout();
+//         navigate('/', { replace: true });
+//     };
+
+//     const handleProfileUpdate = (newData) => {
+//         setUserData(newData);
+//     };
+
+//     const navItems = [
+//         { id: 'overview', label: 'Overview', icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></svg> },
+//         { id: 'results', label: 'My Results', icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /></svg> },
+//         { id: 'profile', label: 'Profile', icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg> },
+//         { id: 'help', label: 'Help', icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg> },
+//     ];
+
+//     return (
+//         <div className="admin-layout">
+//             <aside className="sidebar">
+//                 <div className="sidebar-header">
+//                     <div className="sidebar-logo-mark">S</div>
+//                     <span className="sidebar-brand-name">SRMS</span>
+//                 </div>
+//                 <nav className="menu-nav">
+//                     <span className="section-label">Student Portal</span>
+//                     {navItems.map(item => (
+//                         <div key={item.id} className={`menu-link ${activePage === item.id ? 'active' : ''}`} onClick={() => setActivePage(item.id)}>
+//                             {item.icon}
+//                             <span className="menu-text">{item.label}</span>
+//                         </div>
+//                     ))}
+//                 </nav>
+//                 <div className="sidebar-footer">
+//                     <div className="logout-link" onClick={handleLogout}>
+//                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
+//                         <span>Logout</span>
+//                     </div>
+//                 </div>
+//             </aside>
+
+//             <main className="main-content">
+//                 <header className="top-navbar">
+//                     <div className="navbar-left">
+//                         <div className="page-title">{activePage.charAt(0).toUpperCase() + activePage.slice(1)}</div>
+//                         <div className="page-breadcrumb">Student / {activePage}</div>
+//                     </div>
+//                     <div className="navbar-right">
+//                         <div className="navbar-user-info">
+//                             <div className="navbar-user-text">
+//                                 <span className="navbar-user-name">{userData.fullName}</span>
+//                                 <span className="navbar-email">{userData.email}</span>
+//                             </div>
+//                             <img src={userData.profileImg} alt="Profile" className="navbar-avatar" />
+//                             <span className="navbar-badge">Student</span>
+//                         </div>
+//                     </div>
+//                 </header>
+
+//                 <div className="dashboard-content">
+//                     {activePage === 'overview' && <OverviewPage subjects={subjects} percentage={percentage} isPassed={isPassed} />}
+//                     {activePage === 'results' && <MyResultsPage userData={userData} subjects={subjects} stats={{ totalMarks, maxMarks, percentage, isPassed }} />}
+//                     {activePage === 'profile' && <ProfilePage userData={userData} onUpdate={handleProfileUpdate} />}
+//                     {activePage === 'help' && <HelpPage />}
+//                 </div>
+//             </main>
+//         </div>
+//     );
+// };
+
+// /* --- Sub-components (Overview, Results, Profile) --- */
+
+// const OverviewPage = ({ percentage, isPassed }) => (
+//     <>
+//         <div className="content-header">
+//             <h1>Welcome back!</h1>
+//             <p>Academic performance at a glance.</p>
+//         </div>
+//         <div className="stats-grid">
+//             <div className="stat-card">
+//                 <div className="stat-card-left">
+//                     <div className="stat-label">Overall Score</div>
+//                     <div className="stat-value">{percentage}%</div>
+//                 </div>
+//                 <div className="stat-icon-wrap">📈</div>
+//             </div>
+//             <div className="stat-card">
+//                 <div className="stat-card-left">
+//                     <div className="stat-label">Status</div>
+//                     <div className="stat-value" style={{ color: isPassed ? 'green' : 'red' }}>{isPassed ? 'PASS' : 'FAIL'}</div>
+//                 </div>
+//                 <div className="stat-icon-wrap">🎓</div>
+//             </div>
+//         </div>
+//         <div className="alert" style={{ backgroundColor: isPassed ? '#f0fdf4' : '#fef2f2', padding: '15px', borderRadius: '8px', marginTop: '20px' }}>
+//             {isPassed ? "🎉 Congratulations! You have passed this term." : "⚠️ Work harder! Try for a better result next time."}
+//         </div>
+//     </>
+// );
+
+// const MyResultsPage = ({ userData, subjects, stats }) => (
+//     <>
+//         <div className="content-header">
+//             <h1>Academic Transcript</h1>
+//             <button className="btn btn-primary" onClick={() => exportStudentPDF({ ...userData, subjects, ...stats })}>
+//                 Download PDF
+//             </button>
+//         </div>
+//         <div className="section-card">
+//             <div className="result-details-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', padding: '20px' }}>
+//                 <div className="result-detail-item"><strong>Student Name:</strong> <div>{userData.fullName}</div></div>
+//                 <div className="result-detail-item"><strong>Roll ID:</strong> <div>{userData.rollId}</div></div>
+//                 <div className="result-detail-item"><strong>Total Marks:</strong> <div>{stats.totalMarks} / {stats.maxMarks}</div></div>
+//                 <div className="result-detail-item"><strong>Percentage:</strong> <div>{stats.percentage}%</div></div>
+//             </div>
+//             <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
+//                 <thead>
+//                     <tr style={{ background: '#f8f9fa' }}>
+//                         <th style={{ padding: '12px', textAlign: 'left' }}>Subject</th>
+//                         <th style={{ padding: '12px', textAlign: 'left' }}>Marks</th>
+//                         <th style={{ padding: '12px', textAlign: 'left' }}>Grade</th>
+//                     </tr>
+//                 </thead>
+//                 <tbody>
+//                     {subjects.map(s => (
+//                         <tr key={s.id} style={{ borderBottom: '1px solid #eee' }}>
+//                             <td style={{ padding: '12px' }}>{s.name}</td>
+//                             <td style={{ padding: '12px' }}>{s.marks} / 100</td>
+//                             <td style={{ padding: '12px' }}>{s.grade}</td>
+//                         </tr>
+//                     ))}
+//                 </tbody>
+//             </table>
+//         </div>
+//     </>
+// );
+
+// const ProfilePage = ({ userData, onUpdate }) => {
+//     const [isEditing, setIsEditing] = useState(false);
+//     const [formData, setFormData] = useState(userData);
+
+//     const handleSave = () => {
+//         onUpdate(formData);
+//         setIsEditing(false);
+//     };
+
+//     return (
+//         <div className="section-card" style={{ padding: '20px' }}>
+//             <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
+//                 <h3 className="section-title">Account Details</h3>
+//                 <button className="btn btn-sm" onClick={() => (isEditing ? handleSave() : setIsEditing(true))}>
+//                     {isEditing ? 'Save Changes' : 'Edit Profile'}
+//                 </button>
+//             </div>
+//             <div className="form-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+//                 <div className="form-group">
+//                     <label style={{ display: 'block', marginBottom: '5px' }}>Full Name</label>
+//                     <input style={{ width: '100%', padding: '8px' }} type="text" value={formData.fullName} disabled={!isEditing} onChange={(e) => setFormData({...formData, fullName: e.target.value})} />
+//                 </div>
+//                 <div className="form-group">
+//                     <label style={{ display: 'block', marginBottom: '5px' }}>Email</label>
+//                     <input style={{ width: '100%', padding: '8px' }} type="email" value={formData.email} disabled={!isEditing} onChange={(e) => setFormData({...formData, email: e.target.value})} />
+//                 </div>
+//                 <div className="form-group">
+//                     <label style={{ display: 'block', marginBottom: '5px' }}>Roll ID</label>
+//                     <input style={{ width: '100%', padding: '8px', backgroundColor: '#f0f0f0' }} type="text" value={formData.rollId} disabled />
+//                 </div>
+//                 <div className="form-group">
+//                     <label style={{ display: 'block', marginBottom: '5px' }}>Class</label>
+//                     <input style={{ width: '100%', padding: '8px', backgroundColor: '#f0f0f0' }} type="text" value={formData.class} disabled />
+//                 </div>
+//             </div>
+//         </div>
+//     );
+// };
+
+// export default StudentDashboard;
+
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HelpPage from '../../components/HelpPage';
 import '../../style/StudentDashboard.css';
+
+const DEFAULT_AVATAR = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
 
 /* =========================================================
    PDF GENERATOR — Styled Academic Report
@@ -740,7 +1043,9 @@ const exportStudentPDF = (studentData) => {
     win.onload = () => setTimeout(() => win.print(), 500);
 };
 
-/* --- Main Dashboard Component --- */
+/* =========================================================
+   MAIN DASHBOARD COMPONENT
+   ========================================================= */
 const StudentDashboard = ({ logout, userEmail }) => {
     const [userData, setUserData] = useState({
         fullName: 'Anjali Rao',
@@ -749,7 +1054,7 @@ const StudentDashboard = ({ logout, userEmail }) => {
         class: 'General',
         dob: '2005-06-15',
         gender: 'Female',
-        profileImg: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'
+        profileImg: DEFAULT_AVATAR,
     });
 
     const [activePage, setActivePage] = useState('overview');
@@ -774,14 +1079,31 @@ const StudentDashboard = ({ logout, userEmail }) => {
     };
 
     const handleProfileUpdate = (newData) => {
-        setUserData(newData);
+        setUserData(prev => ({ ...prev, ...newData }));
+    };
+
+    // Called from ProfilePage when user picks a new image
+    const handleImageChange = (base64Url) => {
+        setUserData(prev => ({ ...prev, profileImg: base64Url }));
     };
 
     const navItems = [
-        { id: 'overview', label: 'Overview', icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></svg> },
-        { id: 'results', label: 'My Results', icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /></svg> },
-        { id: 'profile', label: 'Profile', icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg> },
-        { id: 'help', label: 'Help', icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg> },
+        {
+            id: 'overview', label: 'Overview',
+            icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></svg>
+        },
+        {
+            id: 'results', label: 'My Results',
+            icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /></svg>
+        },
+        {
+            id: 'profile', label: 'Profile',
+            icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
+        },
+        {
+            id: 'help', label: 'Help',
+            icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>
+        },
     ];
 
     return (
@@ -794,7 +1116,11 @@ const StudentDashboard = ({ logout, userEmail }) => {
                 <nav className="menu-nav">
                     <span className="section-label">Student Portal</span>
                     {navItems.map(item => (
-                        <div key={item.id} className={`menu-link ${activePage === item.id ? 'active' : ''}`} onClick={() => setActivePage(item.id)}>
+                        <div
+                            key={item.id}
+                            className={`menu-link ${activePage === item.id ? 'active' : ''}`}
+                            onClick={() => setActivePage(item.id)}
+                        >
                             {item.icon}
                             <span className="menu-text">{item.label}</span>
                         </div>
@@ -802,7 +1128,11 @@ const StudentDashboard = ({ logout, userEmail }) => {
                 </nav>
                 <div className="sidebar-footer">
                     <div className="logout-link" onClick={handleLogout}>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                            <polyline points="16 17 21 12 16 7" />
+                            <line x1="21" y1="12" x2="9" y2="12" />
+                        </svg>
                         <span>Logout</span>
                     </div>
                 </div>
@@ -811,7 +1141,9 @@ const StudentDashboard = ({ logout, userEmail }) => {
             <main className="main-content">
                 <header className="top-navbar">
                     <div className="navbar-left">
-                        <div className="page-title">{activePage.charAt(0).toUpperCase() + activePage.slice(1)}</div>
+                        <div className="page-title">
+                            {activePage.charAt(0).toUpperCase() + activePage.slice(1)}
+                        </div>
                         <div className="page-breadcrumb">Student / {activePage}</div>
                     </div>
                     <div className="navbar-right">
@@ -820,16 +1152,44 @@ const StudentDashboard = ({ logout, userEmail }) => {
                                 <span className="navbar-user-name">{userData.fullName}</span>
                                 <span className="navbar-email">{userData.email}</span>
                             </div>
-                            <img src={userData.profileImg} alt="Profile" className="navbar-avatar" />
+                            {/* ── Navbar Avatar ── */}
+                            <img
+                                src={userData.profileImg || DEFAULT_AVATAR}
+                                alt="Profile"
+                                className="navbar-avatar"
+                                onError={(e) => { e.currentTarget.src = DEFAULT_AVATAR; }}
+                                style={{
+                                    width: '38px',
+                                    height: '38px',
+                                    borderRadius: '50%',
+                                    objectFit: 'cover',
+                                    border: '2px solid #6b0f1a',
+                                    flexShrink: 0,
+                                }}
+                            />
                             <span className="navbar-badge">Student</span>
                         </div>
                     </div>
                 </header>
 
                 <div className="dashboard-content">
-                    {activePage === 'overview' && <OverviewPage subjects={subjects} percentage={percentage} isPassed={isPassed} />}
-                    {activePage === 'results' && <MyResultsPage userData={userData} subjects={subjects} stats={{ totalMarks, maxMarks, percentage, isPassed }} />}
-                    {activePage === 'profile' && <ProfilePage userData={userData} onUpdate={handleProfileUpdate} />}
+                    {activePage === 'overview' && (
+                        <OverviewPage subjects={subjects} percentage={percentage} isPassed={isPassed} />
+                    )}
+                    {activePage === 'results' && (
+                        <MyResultsPage
+                            userData={userData}
+                            subjects={subjects}
+                            stats={{ totalMarks, maxMarks, percentage, isPassed }}
+                        />
+                    )}
+                    {activePage === 'profile' && (
+                        <ProfilePage
+                            userData={userData}
+                            onUpdate={handleProfileUpdate}
+                            onImageChange={handleImageChange}
+                        />
+                    )}
                     {activePage === 'help' && <HelpPage />}
                 </div>
             </main>
@@ -837,8 +1197,9 @@ const StudentDashboard = ({ logout, userEmail }) => {
     );
 };
 
-/* --- Sub-components (Overview, Results, Profile) --- */
-
+/* =========================================================
+   OVERVIEW PAGE
+   ========================================================= */
 const OverviewPage = ({ percentage, isPassed }) => (
     <>
         <div className="content-header">
@@ -856,31 +1217,57 @@ const OverviewPage = ({ percentage, isPassed }) => (
             <div className="stat-card">
                 <div className="stat-card-left">
                     <div className="stat-label">Status</div>
-                    <div className="stat-value" style={{ color: isPassed ? 'green' : 'red' }}>{isPassed ? 'PASS' : 'FAIL'}</div>
+                    <div className="stat-value" style={{ color: isPassed ? 'green' : 'red' }}>
+                        {isPassed ? 'PASS' : 'FAIL'}
+                    </div>
                 </div>
                 <div className="stat-icon-wrap">🎓</div>
             </div>
         </div>
-        <div className="alert" style={{ backgroundColor: isPassed ? '#f0fdf4' : '#fef2f2', padding: '15px', borderRadius: '8px', marginTop: '20px' }}>
-            {isPassed ? "🎉 Congratulations! You have passed this term." : "⚠️ Work harder! Try for a better result next time."}
+        <div
+            className="alert"
+            style={{
+                backgroundColor: isPassed ? '#f0fdf4' : '#fef2f2',
+                padding: '15px',
+                borderRadius: '8px',
+                marginTop: '20px',
+            }}
+        >
+            {isPassed
+                ? '🎉 Congratulations! You have passed this term.'
+                : '⚠️ Work harder! Try for a better result next time.'}
         </div>
     </>
 );
 
+/* =========================================================
+   MY RESULTS PAGE
+   ========================================================= */
 const MyResultsPage = ({ userData, subjects, stats }) => (
     <>
         <div className="content-header">
             <h1>Academic Transcript</h1>
-            <button className="btn btn-primary" onClick={() => exportStudentPDF({ ...userData, subjects, ...stats })}>
+            <button
+                className="btn btn-primary"
+                onClick={() => exportStudentPDF({ ...userData, subjects, ...stats })}
+            >
                 Download PDF
             </button>
         </div>
         <div className="section-card">
-            <div className="result-details-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', padding: '20px' }}>
-                <div className="result-detail-item"><strong>Student Name:</strong> <div>{userData.fullName}</div></div>
-                <div className="result-detail-item"><strong>Roll ID:</strong> <div>{userData.rollId}</div></div>
-                <div className="result-detail-item"><strong>Total Marks:</strong> <div>{stats.totalMarks} / {stats.maxMarks}</div></div>
-                <div className="result-detail-item"><strong>Percentage:</strong> <div>{stats.percentage}%</div></div>
+            <div
+                className="result-details-grid"
+                style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                    gap: '20px',
+                    padding: '20px',
+                }}
+            >
+                <div className="result-detail-item"><strong>Student Name:</strong><div>{userData.fullName}</div></div>
+                <div className="result-detail-item"><strong>Roll ID:</strong><div>{userData.rollId}</div></div>
+                <div className="result-detail-item"><strong>Total Marks:</strong><div>{stats.totalMarks} / {stats.maxMarks}</div></div>
+                <div className="result-detail-item"><strong>Percentage:</strong><div>{stats.percentage}%</div></div>
             </div>
             <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
                 <thead>
@@ -904,39 +1291,164 @@ const MyResultsPage = ({ userData, subjects, stats }) => (
     </>
 );
 
-const ProfilePage = ({ userData, onUpdate }) => {
+/* =========================================================
+   PROFILE PAGE  — with avatar upload
+   ========================================================= */
+const ProfilePage = ({ userData, onUpdate, onImageChange }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState(userData);
+    const fileInputRef = useRef(null);
 
     const handleSave = () => {
         onUpdate(formData);
         setIsEditing(false);
     };
 
+    const handleImageClick = () => {
+        fileInputRef.current.click();
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // Only allow image files
+        if (!file.type.startsWith('image/')) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const base64Url = event.target.result;
+            onImageChange(base64Url);           // update global userData → also refreshes navbar
+            setFormData(prev => ({ ...prev, profileImg: base64Url }));
+        };
+        reader.readAsDataURL(file);
+
+        // Reset input so re-selecting the same file still fires onChange
+        e.target.value = '';
+    };
+
     return (
         <div className="section-card" style={{ padding: '20px' }}>
-            <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
+
+            {/* ── Avatar Upload Area ── */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '28px' }}>
+                <div
+                    onClick={handleImageClick}
+                    title="Click to change profile picture"
+                    style={{
+                        position: 'relative',
+                        width: '100px',
+                        height: '100px',
+                        borderRadius: '50%',
+                        cursor: 'pointer',
+                        border: '3px solid #6b0f1a',
+                        overflow: 'hidden',
+                    }}
+                >
+                    <img
+                        src={userData.profileImg || DEFAULT_AVATAR}
+                        alt="Profile"
+                        onError={(e) => { e.currentTarget.src = DEFAULT_AVATAR; }}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                    />
+                    {/* Hover overlay */}
+                    <div
+                        style={{
+                            position: 'absolute',
+                            inset: 0,
+                            background: 'rgba(107, 15, 26, 0.55)',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            opacity: 0,
+                            transition: 'opacity 0.2s',
+                            color: '#fff',
+                            fontSize: '11px',
+                            fontWeight: 600,
+                            gap: '4px',
+                        }}
+                        onMouseEnter={(e) => (e.currentTarget.style.opacity = 1)}
+                        onMouseLeave={(e) => (e.currentTarget.style.opacity = 0)}
+                    >
+                        {/* Camera icon */}
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                            <circle cx="12" cy="13" r="4"/>
+                        </svg>
+                        Change
+                    </div>
+                </div>
+
+                {/* Hidden file input */}
+                <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    onChange={handleFileChange}
+                />
+
+                <p style={{ marginTop: '8px', fontSize: '12px', color: '#888' }}>
+                    Click photo to upload a new picture
+                </p>
+            </div>
+
+            {/* ── Form Fields ── */}
+            <div
+                className="section-header"
+                style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}
+            >
                 <h3 className="section-title">Account Details</h3>
-                <button className="btn btn-sm" onClick={() => (isEditing ? handleSave() : setIsEditing(true))}>
+                <button
+                    className="btn btn-sm"
+                    onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
+                >
                     {isEditing ? 'Save Changes' : 'Edit Profile'}
                 </button>
             </div>
-            <div className="form-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+
+            <div
+                className="form-grid"
+                style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}
+            >
                 <div className="form-group">
                     <label style={{ display: 'block', marginBottom: '5px' }}>Full Name</label>
-                    <input style={{ width: '100%', padding: '8px' }} type="text" value={formData.fullName} disabled={!isEditing} onChange={(e) => setFormData({...formData, fullName: e.target.value})} />
+                    <input
+                        style={{ width: '100%', padding: '8px' }}
+                        type="text"
+                        value={formData.fullName}
+                        disabled={!isEditing}
+                        onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                    />
                 </div>
                 <div className="form-group">
                     <label style={{ display: 'block', marginBottom: '5px' }}>Email</label>
-                    <input style={{ width: '100%', padding: '8px' }} type="email" value={formData.email} disabled={!isEditing} onChange={(e) => setFormData({...formData, email: e.target.value})} />
+                    <input
+                        style={{ width: '100%', padding: '8px' }}
+                        type="email"
+                        value={formData.email}
+                        disabled={!isEditing}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    />
                 </div>
                 <div className="form-group">
                     <label style={{ display: 'block', marginBottom: '5px' }}>Roll ID</label>
-                    <input style={{ width: '100%', padding: '8px', backgroundColor: '#f0f0f0' }} type="text" value={formData.rollId} disabled />
+                    <input
+                        style={{ width: '100%', padding: '8px', backgroundColor: '#f0f0f0' }}
+                        type="text"
+                        value={formData.rollId}
+                        disabled
+                    />
                 </div>
                 <div className="form-group">
                     <label style={{ display: 'block', marginBottom: '5px' }}>Class</label>
-                    <input style={{ width: '100%', padding: '8px', backgroundColor: '#f0f0f0' }} type="text" value={formData.class} disabled />
+                    <input
+                        style={{ width: '100%', padding: '8px', backgroundColor: '#f0f0f0' }}
+                        type="text"
+                        value={formData.class}
+                        disabled
+                    />
                 </div>
             </div>
         </div>

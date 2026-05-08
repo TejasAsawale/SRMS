@@ -110,9 +110,10 @@
     transition: transform 0.2s;
 }
 
-.class-card:hover {
-    transform: translateY(-5px);
-}
+.class-card:hover { transform: translateY(-5px); }
+
+.card-icon { font-size: 32px; margin-bottom: 10px; }
+.class-name { font-weight: bold; font-size: 18px; color: var(--text-main); }
 
 .delete-card-btn {
     position: absolute;
@@ -125,6 +126,22 @@
     font-size: 18px;
     padding: 4px;
     opacity: 0.6;
+}
+
+.card-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.btn-outline {
+    font-size: 12px;
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    cursor: pointer;
 }
 
 /* --- Data Table --- */
@@ -145,10 +162,58 @@
 .data-table td {
     padding: 12px 15px;
     border-bottom: 1px solid var(--border);
+    color: var(--text-main);
 }
+
+/* --- Declare Form Styling --- */
+.declare-section { padding: 30px; }
+.declare-form { max-width: 500px; margin: 0 auto; }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-main); }
+.form-group select { width: 100%; }
+
+.marks-input-container {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+}
+
+.marks-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.marks-row input { width: 100px; text-align: center; }
+
+.btn-primary {
+    width: 100%;
+    background: var(--primary);
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-primary:hover { background: var(--primary-hover); }
 
 /* --- Actions --- */
 .action-btns { display: flex; gap: 10px; }
+.btn-report {
+    padding: 5px 12px;
+    font-size: 12px;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    background: transparent;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
 .btn-delete-row {
     background: #fff1f0;
     color: var(--danger);
@@ -161,37 +226,11 @@
 }
 
 /* --- PROFESSIONAL PRINT STYLES --- */
-.pdf-body, .print-body {
-    background: #f0f0f0;
-    font-family: 'Segoe UI', Tahoma, sans-serif;
-}
-
-.report-card {
-    background: #ffffff;
-    width: 210mm;
-    margin: 0 auto;
-    padding: 40px;
-    box-sizing: border-box;
-    position: relative;
-}
-
-.top-accent-bar {
-    height: 12px;
-    background: var(--report-accent);
-    margin: -40px -40px 30px -40px;
-}
-
-.marks-table-professional {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.marks-table-professional th {
-    background: var(--report-accent);
-    color: #fff;
-    padding: 12px;
-}
-
+.pdf-body, .print-body { background: #f0f0f0; font-family: 'Segoe UI', Tahoma, sans-serif; }
+.report-card { background: #ffffff; width: 210mm; margin: 0 auto; padding: 40px; box-sizing: border-box; position: relative; }
+.top-accent-bar { height: 12px; background: var(--report-accent); margin: -40px -40px 30px -40px; }
+.marks-table-professional { width: 100%; border-collapse: collapse; }
+.marks-table-professional th { background: var(--report-accent); color: #fff; padding: 12px; }
 .status-pass { color: var(--success); font-weight: bold; }
 .status-fail { color: var(--danger); font-weight: bold; }
 
