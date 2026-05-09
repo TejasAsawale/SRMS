@@ -18,10 +18,10 @@ app.use(cors({
 // Crucial for receiving JSON data from Axios
 app.use(express.json());
 
-// 3. Database Connection
+// Database Connection
 connectdb();
 
-// 4. Health Check Route - for just checking route is working or not
+// checking route is working or not
 app.get('/', (req, res) => {
     res.send("SRMS API is running...");
 });
