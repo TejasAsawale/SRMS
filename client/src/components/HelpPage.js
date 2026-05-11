@@ -11,7 +11,7 @@ const HelpPage = () => {
         },
         {
             q: 'I see incorrect marks in my result. What should I do?',
-            a: 'Email us at admin@srms.edu with your Roll ID, subject name, and the issue. The administration team typically responds within 2–3 working days.'
+            a: 'Email us at admin@srms.com with your Roll ID, subject name, and the issue. The administration team typically responds within 2–3 working days.'
         },
         {
             q: 'How do I update my profile information?',
@@ -82,7 +82,7 @@ const HelpPage = () => {
                             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                             <polyline points="22,6 12,13 2,6" />
                         </svg>
-                        <a href="mailto:admin@srms.edu">admin@srms.edu</a>
+                        <a href="mailto:admin@srms.com">admin@srms.com</a>
                     </div>
                     <div className="help-contact-row">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">

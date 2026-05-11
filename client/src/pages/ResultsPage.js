@@ -625,10 +625,10 @@ const exportToPDF = (className, classStudents, classSubjects, allResults) => {
             const res = allResults.find(r => r.RollId === student.RollId && r.SubjectCode === sub.SubjectCode);
             return res ? Number(res.Marks) : null;
         });
-        const obtained   = subjectResults.reduce((sum, m) => sum + (m || 0), 0);
-        const total      = classSubjects.length * 100;
+        const obtained = subjectResults.reduce((sum, m) => sum + (m || 0), 0);
+        const total = classSubjects.length * 100;
         const percentage = total > 0 ? ((obtained / total) * 100).toFixed(1) : "0.0";
-        const passed     = subjectResults.every(m => m !== null && m > 35) && obtained > 0;
+        const passed = subjectResults.every(m => m !== null && m > 35) && obtained > 0;
         return { student, subjectResults, obtained, total, percentage, passed };
     });
 
@@ -757,21 +757,21 @@ const exportSinglePDF = (student, classSubjects, allResults) => {
 // ─── MAIN COMPONENT ──────────────────────────────────────────────────────────
 
 const ResultsPage = () => {
-    const [activeTab, setActiveTab]         = useState("view");
-    const [searchQuery, setSearchQuery]     = useState("");
+    const [activeTab, setActiveTab] = useState("view");
+    const [searchQuery, setSearchQuery] = useState("");
     const [selectedClass, setSelectedClass] = useState("All Classes");
 
-    const [classes, setClasses]             = useState([]);
-    const [allResults, setAllResults]       = useState([]);
-    const [subjects, setSubjects]           = useState([]);
-    const [students, setStudents]           = useState([]);
-    const [loading, setLoading]             = useState(true);
+    const [classes, setClasses] = useState([]);
+    const [allResults, setAllResults] = useState([]);
+    const [subjects, setSubjects] = useState([]);
+    const [students, setStudents] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [refreshTrigger, setRefreshTrigger] = useState(0);
 
     // Declare form state
-    const [formClass, setFormClass]         = useState("");
-    const [formStudent, setFormStudent]     = useState("");
-    const [marksInput, setMarksInput]       = useState({});
+    const [formClass, setFormClass] = useState("");
+    const [formStudent, setFormStudent] = useState("");
+    const [marksInput, setMarksInput] = useState({});
 
     const fetchData = useCallback(async () => {
         try {
@@ -878,8 +878,8 @@ const ResultsPage = () => {
 
     // View Results table — only students who HAVE results declared
     const filteredStudents = students.filter(s => {
-        const hasMarks      = allResults.some(r => r.RollId === s.RollId);
-        const matchesClass  = selectedClass === "All Classes" || s.ClassId === selectedClass;
+        const hasMarks = allResults.some(r => r.RollId === s.RollId);
+        const matchesClass = selectedClass === "All Classes" || s.ClassId === selectedClass;
         const matchesSearch =
             s.StudentName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
             s.RollId?.toLowerCase().includes(searchQuery.toLowerCase());
@@ -922,7 +922,7 @@ const ResultsPage = () => {
                         {activeClasses.map(cls => {
                             const classStudents = students.filter(s => s.ClassId === cls.ClassName);
                             const classSubjects = subjects.filter(sub => getSubjectClass(sub) === cls.ClassName);
-                            const hasResults    = allResults.some(r =>
+                            const hasResults = allResults.some(r =>
                                 classStudents.find(s => s.RollId === r.RollId)
                             );
                             return (
@@ -1170,11 +1170,18 @@ const ResultsPage = () => {
                             </>
                         )}
 
-                        {formStudent && declareSubjects.length === 0 && (
+                        {/* {formStudent && declareSubjects.length === 0 && (
                             <div style={{ textAlign: "center", padding: "32px", color: "#94a3b8", fontSize: "14px" }}>
                                 No subjects defined for this class. Add subjects first.
                             </div>
+                        )} */}
+
+                        {formClass && declareSubjects.length === 0 && (
+                            <div className="alert alert-warning" style={{ margin: "24px" }}>
+                                ⚠️ Please assign subjects first before declaring results for this class.
+                            </div>
                         )}
+
                     </form>
                 </div>
             )}

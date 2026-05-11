@@ -5,7 +5,8 @@ const { addStudent,
         loginStudent,
         updateStudent, 
         deleteStudent,
-        updateSubjects
+        updateSubjects,
+        getStudentByEmail
     } = require('../controllers/studentController');
 
 // POST /api/students/addStudent (Signup)
@@ -24,5 +25,8 @@ router.put('/update/:id', updateStudent);
 router.delete('/delete/:id', deleteStudent); 
 
 router.put('/updateSubjects/:id', updateSubjects);
+
+router.get('/byEmail/:email', getStudentByEmail);
+
 
 module.exports = router;

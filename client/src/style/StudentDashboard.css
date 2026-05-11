@@ -375,29 +375,103 @@ body {
 .pill-danger { background: #fee2e2; color: #b91c1c; }
 
 /* =========================================================
-   FAQ & HELP SECTION
+   HELP / FAQ SECTION
    ========================================================= */
 .faq-list {
-    padding: 20px;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .faq-item {
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
-    margin-bottom: 12px;
-    padding: 16px;
+    overflow: hidden;
 }
 
 .faq-question {
-    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    font-size: 14px;
+    font-weight: 600;
     color: var(--text-primary);
-    margin-bottom: 8px;
+    cursor: pointer;
+    user-select: none;
+    transition: background var(--transition);
+}
+
+.faq-question:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.faq-chevron {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    color: var(--text-muted);
+    transition: transform 0.2s ease;
+}
+
+.faq-chevron.open {
+    transform: rotate(180deg);
 }
 
 .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    padding: 0 18px;
+    transition: max-height 0.25s ease, padding 0.25s ease;
+}
+
+.faq-answer.open {
+    max-height: 200px;
+    padding: 0 18px 16px;
+}
+
+/* Contact block */
+.help-contact-body {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.help-contact-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     font-size: 14px;
     color: var(--text-secondary);
+}
+
+.help-contact-row svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    color: var(--brand);
+}
+
+.help-contact-row a {
+    color: var(--brand);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.help-contact-row a:hover {
+    text-decoration: underline;
+}
+
+.help-contact-note {
+    font-size: 12.5px;
+    color: var(--text-muted);
     line-height: 1.6;
+    padding-top: 4px;
 }
 
 /* =========================================================

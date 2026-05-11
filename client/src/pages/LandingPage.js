@@ -4,7 +4,7 @@ import '../style/LandingPage.css';
 
 const LandingPage = () => {
     const navigate = useNavigate();
-    
+
     // --- Logic: State Management ---
     const [scrolled, setScrolled] = useState(false);
     const [faqOpen, setFaqOpen] = useState(null);
@@ -40,7 +40,7 @@ const LandingPage = () => {
 
     return (
         <div className="lp-container">
-            
+
             {/* ── Navbar ── */}
             <nav className={`lp-nav ${scrolled ? 'lp-nav-scrolled' : ''}`}>
                 <div className="lp-nav-brand">
@@ -50,9 +50,9 @@ const LandingPage = () => {
 
                 <div className="lp-nav-links">
                     {['Features', 'FAQ', 'Contact'].map(item => (
-                        <button 
-                            key={item} 
-                            onClick={() => scrollTo(item.toLowerCase())} 
+                        <button
+                            key={item}
+                            onClick={() => scrollTo(item.toLowerCase())}
                             className="lp-link-btn"
                         >
                             {item}
@@ -93,6 +93,9 @@ const LandingPage = () => {
                         { icon: '📊', title: 'Instant Results', desc: 'View your exam results the moment they are published.' },
                         { icon: '📚', title: 'Subject Tracking', desc: 'See all your enrolled subjects in one place.' },
                         { icon: '🔒', title: 'Secure Login', desc: 'Your data is protected with encrypted credentials.' },
+                        { icon: '📊', title: 'Instant Results', desc: 'View your exam results the moment they are published.' },
+                        { icon: '📚', title: 'Subject Tracking', desc: 'See all your enrolled subjects in one place.' },
+                        { icon: '🔒', title: 'Secure Login', desc: 'Your data is protected with encrypted credentials.' },
                     ].map(f => (
                         <div key={f.title} className="lp-feature-card">
                             <div className="lp-feature-icon">{f.icon}</div>
@@ -113,8 +116,8 @@ const LandingPage = () => {
                     <div className="lp-faq-list">
                         {faqs.map((faq, i) => (
                             <div key={i} className="lp-faq-item">
-                                <button 
-                                    className="lp-faq-question" 
+                                <button
+                                    className="lp-faq-question"
                                     onClick={() => setFaqOpen(faqOpen === i ? null : i)}
                                 >
                                     <span>{faq.q}</span>
@@ -146,32 +149,32 @@ const LandingPage = () => {
                         <form onSubmit={handleContactSubmit} className="lp-contact-form">
                             <div className="lp-form-group">
                                 <label>Full Name</label>
-                                <input 
-                                    type="text" 
-                                    value={contactForm.name} 
-                                    onChange={(e) => setContactForm({...contactForm, name: e.target.value})}
-                                    placeholder="Enter your name" 
-                                    required 
+                                <input
+                                    type="text"
+                                    value={contactForm.name}
+                                    onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
+                                    placeholder="Enter your name"
+                                    required
                                 />
                             </div>
                             <div className="lp-form-group">
                                 <label>Email Address</label>
-                                <input 
-                                    type="email" 
-                                    value={contactForm.email} 
-                                    onChange={(e) => setContactForm({...contactForm, email: e.target.value})}
-                                    placeholder="you@example.com" 
-                                    required 
+                                <input
+                                    type="email"
+                                    value={contactForm.email}
+                                    onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
+                                    placeholder="you@example.com"
+                                    required
                                 />
                             </div>
                             <div className="lp-form-group">
                                 <label>Message</label>
-                                <textarea 
-                                    value={contactForm.message} 
-                                    onChange={(e) => setContactForm({...contactForm, message: e.target.value})}
-                                    placeholder="How can we help?" 
-                                    rows="5" 
-                                    required 
+                                <textarea
+                                    value={contactForm.message}
+                                    onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
+                                    placeholder="How can we help?"
+                                    rows="5"
+                                    required
                                 />
                             </div>
                             <button type="submit" className="lp-btn-primary lp-w-100">Send Message</button>
