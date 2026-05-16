@@ -10,29 +10,23 @@ const classRoutes = require('./routes/classRoutes');
 dotenv.config();
 const app = express();
 
-// use cors to access (rt 3000)
 app.use(cors({
-    origin: "http://localhost:3000",
+    // origin: "http://localhost:3000",
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE"],
 }));
-// Crucial for receiving JSON data from Axios
 app.use(express.json());
-
-// Database Connection
 connectdb();
 
-// checking route is working or not
 app.get('/', (req, res) => {
     res.send("SRMS API is running...");
 });
 
-// 5. Main Routes
 app.use('/api/students', studentRoutes);
 app.use('/api/subjects', subjectRoutes);
 app.use('/api/results', resultRoutes);
 app.use('/api/classes', classRoutes);
 
-// 6. Server Port
 const PORT = process.env.PORT || 5003;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

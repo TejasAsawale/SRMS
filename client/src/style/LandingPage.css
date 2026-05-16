@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,800&display=swap');
 
-/* ── 1. Variables & Global ── */
 .lp-container.light-theme {
     --bg-main: #ffffff;
     --bg-alt: #f9f9fb;
@@ -28,7 +27,7 @@
     background-color: var(--bg-main);
 }
 
-/* ── 2. Navbar ── */
+/* Navbar */
 .lp-nav {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -98,14 +97,14 @@
     background: rgba(255,255,255,0.15);
 }
 
-/* ── 3. Hero Section ── */
+/* Hero Section */
 .lp-hero {
     min-height: 100vh;
     display: flex; align-items: center; justify-content: center;
     padding: 100px 40px 80px;
     position: relative;
     overflow: hidden;
-    background-color: #1a1a2e; /* Default dark */
+    background-color: #1a1a2e; 
     transition: background 0.3s ease;
 }
 
@@ -172,7 +171,7 @@
     transition: all 0.2s;
 }
 
-/* ── 4. Features & FAQ ── */
+/* Features & FAQ */
 .lp-features-section, .lp-faq-section {
     background: var(--bg-main);
     padding: 96px 40px;
@@ -211,9 +210,9 @@
 .lp-faq-rotate { transform: rotate(45deg); }
 .lp-faq-answer { color: var(--text-gray); font-size: 15px; line-height: 1.7; margin-bottom: 20px; }
 
-/* ── 5. Contact Section ── */
+/* Contact Section */
 .lp-contact-section {
-    background: #1a1a2e; /* Dark Default */
+    background: #1a1a2e; 
     padding: 96px 40px;
     transition: background 0.3s ease;
 }
@@ -239,8 +238,7 @@
     border-color: #e85d0a; background: rgba(255,255,255,0.09);
 }
 
-/* ── 6. Theme Specific Overrides ── */
-
+/* Theme Specific Overrides */
 /* Light Mode Overrides */
 .lp-container.light-theme .lp-hero {
     background-color: #ffffff !important;
@@ -259,7 +257,7 @@
 /* Dark Mode Overrides (Explicit) */
 .lp-container.dark-theme .lp-contact-card { background-color: transparent; padding: 0; }
 
-/* ── 7. Footer & Responsive ── */
+/* Footer & Responsive */
 .lp-footer { background: #111122; padding: 28px 48px; display: flex; justify-content: space-between; align-items: center; }
 .lp-footer p { color: rgba(255,255,255,0.4); font-size: 13px; }
 .lp-footer-links { display: flex; gap: 24px; }

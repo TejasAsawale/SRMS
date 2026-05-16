@@ -1,7 +1,4 @@
-/* =========================================================
-   SRMS — Dashboard.css
-   Theme: Reactive Light/Dark — Sliding Panel Auth
-   ========================================================= */
+/* Theme: Reactive Light/Dark */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap');
 
@@ -16,7 +13,7 @@
 
     /* Default: DARK THEME VARIABLES */
     --color-bg: #1a1a2e;
-    --color-surface: #ffffff; /* The form card stays white/light for contrast */
+    --color-surface: #ffffff; 
     --color-border: rgba(0, 0, 0, 0.08);
 
     --color-text-primary: #333333;
@@ -55,7 +52,7 @@ body.light-theme {
     --shadow-card: 0 15px 35px rgba(0, 0, 0, 0.08);
     --back-btn-color: #1a1a2e;
     --back-btn-bg: rgba(0, 0, 0, 0.05);
-    --grid-opacity: 0.15; /* Make the grid dots more visible on white */
+    --grid-opacity: 0.15; 
 }
 
 body {
@@ -67,7 +64,7 @@ body {
     transition: background-color 0.4s ease;
 }
 
-/* --- Page Wrapper --------------------------------------- */
+/* Page Wrapper */
 .auth-wrapper {
     min-height: 100vh;
     display: flex;
@@ -94,7 +91,7 @@ body {
     pointer-events: none;
 }
 
-/* --- Back Button ---------------------------------------- */
+/* Back Button */
 .back-home-btn {
     position: absolute;
     top: 24px;
@@ -119,7 +116,7 @@ body {
     transform: translateX(-2px);
 }
 
-/* --- Main Container ------------------------------------- */
+/* Main Container */
 .auth-container {
     background: var(--color-surface);
     border-radius: var(--radius-lg);
@@ -133,7 +130,7 @@ body {
     transition: box-shadow 0.4s ease;
 }
 
-/* --- Form Containers ------------------------------------ */
+/* Form Containers */
 .form-container {
     position: absolute;
     top: 0;
@@ -168,7 +165,7 @@ body {
     50%, 100%  { opacity: 1; z-index: 5; }
 }
 
-/* --- Auth Form ------------------------------------------ */
+/* Auth Form */
 .auth-form {
     background: var(--color-surface);
     display: flex;
@@ -208,7 +205,7 @@ body {
 
 .form-sub { font-size: 13px; color: var(--color-text-secondary); margin-top: -8px; }
 
-/* --- Alerts --------------------------------------------- */
+/* Alerts */
 .alert {
     display: flex; align-items: center; gap: 8px;
     padding: 10px 14px; border-radius: var(--radius-sm);
@@ -217,7 +214,7 @@ body {
 .alert-error { background: var(--color-error-bg); color: var(--color-error-text); border-color: var(--color-error-border); }
 .alert-success { background: var(--color-success-bg); color: var(--color-success-text); border-color: var(--color-success-border); }
 
-/* --- Form Fields ---------------------------------------- */
+/* Form Fields */
 .form-group { display: flex; flex-direction: column; gap: 5px; width: 100%; text-align: left; }
 .form-group label { font-size: 12px; font-weight: 600; color: var(--color-text-secondary); }
 
@@ -241,7 +238,7 @@ body {
 .form-row { display: flex; gap: 12px; width: 100%; }
 .form-row .form-group { flex: 1; }
 
-/* --- Submit Button --------------------------------------- */
+/* Submit Button */
 .btn-submit {
     width: 100%; padding: 11px 20px; margin-top: 10px;
     background: var(--color-accent); color: #fff; border: none;
@@ -257,7 +254,7 @@ body {
     box-shadow: 0 6px 18px rgba(232, 93, 10, 0.4);
 }
 
-/* --- Overlay -------------------------------------------- */
+/* Overlay */
 .overlay-container {
     position: absolute; top: 0; left: 50%; width: 50%; height: 100%;
     overflow: hidden; transition: transform var(--transition); z-index: 100;
@@ -292,13 +289,13 @@ body {
     cursor: pointer; text-transform: uppercase; transition: all 0.2s ease;
 }
 
-/* --- Footer --------------------------------------------- */
+/* Footer */
 .login-footer {
     margin-top: 28px; font-size: 12px;
     color: rgba(255, 255, 255, 0.25); text-align: center;
 }
 
-/* --- Responsive ----------------------------------------- */
+/* Responsive */
 @media (max-width: 768px) {
     .auth-container { width: 95%; min-height: 550px; }
 }

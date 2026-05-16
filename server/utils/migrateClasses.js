@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const Student = require('../models/Student'); // Adjust path if needed
-const Class = require('../models/Class');     // Adjust path if needed
+const Student = require('../models/Student'); 
+const Class = require('../models/Class');     
 
 dotenv.config();
 
@@ -28,7 +28,7 @@ const migrate = async () => {
         }
 
         console.log("Migration complete! You can now see these as cards on your UI.");
-        process.exit(0); // Close the script successfully
+        process.exit(0);
     } catch (err) {
         console.error("❌ Migration failed:", err);
         process.exit(1);

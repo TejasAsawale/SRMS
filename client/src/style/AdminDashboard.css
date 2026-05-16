@@ -1,11 +1,7 @@
-/* =========================================================
-   SRMS — Admin.css
-   Theme: Dark & Orange (Matches Landing Page)
-   ========================================================= */
+/* Theme: Dark & Orange */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap');
 
-/* --- Reset & Base ---------------------------------------- */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
@@ -78,17 +74,13 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* =========================================================
-   LAYOUT
-   ========================================================= */
+/* LAYOUT */
 .admin-layout {
     display: flex;
     min-height: 100vh;
 }
 
-/* =========================================================
-   SIDEBAR
-   ========================================================= */
+/* SIDEBAR */
 .sidebar {
     width: var(--sidebar-width);
     background: var(--sidebar-bg);
@@ -249,9 +241,7 @@ body {
 .logout-link:hover { background: rgba(232,93,10,0.1); }
 .logout-link svg { width: 16px; height: 16px; }
 
-/* =========================================================
-   MAIN CONTENT AREA
-   ========================================================= */
+/* MAIN CONTENT AREA */
 .main-content {
     flex: 1;
     margin-left: var(--sidebar-width);
@@ -331,9 +321,7 @@ body {
     margin-top: 4px;
 }
 
-/* =========================================================
-   STAT CARDS
-   ========================================================= */
+/* STAT CARDS */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
@@ -401,9 +389,7 @@ body {
 .icon-rose   { background: rgba(244,63,94,0.15);   color: #fb7185; }
 .icon-purple { background: rgba(139,92,246,0.15);  color: #a78bfa; }
 
-/* =========================================================
-   SECTION / TABLE CARDS
-   ========================================================= */
+/* SECTION / TABLE CARDS */
 .section-card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -434,9 +420,7 @@ body {
     margin-top: 2px;
 }
 
-/* =========================================================
-   TABLES
-   ========================================================= */
+/* TABLES */
 .table-wrapper { overflow-x: auto; }
 
 .data-table {
@@ -503,9 +487,7 @@ body {
     color: var(--text-muted);
 }
 
-/* =========================================================
-   BADGES / PILLS
-   ========================================================= */
+/* BADGES / PILLS */
 .pill {
     display: inline-flex;
     align-items: center;
@@ -524,9 +506,7 @@ body {
 .pill-pending  { background: var(--warning-bg); color: var(--warning-text); border-color: var(--warning-border); }
 .pill-info     { background: var(--info-bg);    color: var(--info-text);    border-color: var(--info-border); }
 
-/* =========================================================
-    BUTTONS
-   ========================================================= */
+/* BUTTONS */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -588,11 +568,7 @@ body {
 
 .btn-cancel:hover { background: rgba(255,255,255,0.1); }
 
-/* =========================================================
-   DELETION CONTROLS (Updated)
-   ========================================================= */
-
-/* The 'Delete Whole Class' button - High Visibility */
+/* DELETION CONTROLS (Updated) */
 .btn-delete-bulk {
     background: var(--danger-bg);
     color: var(--danger-text);
@@ -646,9 +622,7 @@ body {
     align-items: center;
 }
 
-/* =========================================================
-   SEARCH / FILTER BAR
-   ========================================================= */
+/* SEARCH / FILTER BAR */
 .filter-bar {
     display: flex;
     align-items: center;
@@ -697,9 +671,7 @@ body {
     color: var(--text-primary);
 }
 
-/* =========================================================
-   FORM LAYOUT
-   ========================================================= */
+/* FORM LAYOUT */
 .form-section { padding: 24px; }
 
 .form-grid {
@@ -769,9 +741,7 @@ body {
     background: rgba(255,255,255,0.02);
 }
 
-/* =========================================================
-   PROGRESS BAR (Results)
-   ========================================================= */
+/* PROGRESS BAR (Results)*/
 .score-cell {
     display: flex;
     align-items: center;
@@ -807,9 +777,7 @@ body {
 .fill-mid  { background: #f59e0b; }
 .fill-low  { background: #ef4444; }
 
-/* =========================================================
-   ALERTS
-   ========================================================= */
+/* ALERTS */
 .alert {
     display: flex;
     align-items: flex-start;
@@ -825,9 +793,7 @@ body {
 .alert-error   { background: var(--danger-bg);  color: var(--danger-text);  border-color: var(--danger-border); }
 .alert-warning { background: var(--warning-bg); color: var(--warning-text); border-color: var(--warning-border); }
 
-/* =========================================================
-   EMPTY STATE
-   ========================================================= */
+/* EMPTY STATE */
 .empty-state {
     padding: 52px 20px;
     text-align: center;
@@ -874,9 +840,7 @@ body {
 .sug-name { font-size: 14px; font-weight: 500; color: var(--text-primary); }
 .sug-id   { font-size: 12px; color: var(--text-muted); }
 
-/* =========================================================
-   RESULTS PAGE ADDITIONS
-   ========================================================= */
+/* RESULTS PAGE ADDITIONS */
 .tab-bar {
     display: flex;
     gap: 4px;
@@ -974,9 +938,7 @@ body {
 /* Action Buttons Group */
 .action-btns { display: flex; gap: 6px; }
 
-/* =========================================================
-   SKELETON LOADER
-   ========================================================= */
+/* SKELETON LOADER */
 @keyframes skeleton-shimmer {
     0%   { background-position: -600px 0; }
     100% { background-position: 600px 0; }
@@ -1006,10 +968,7 @@ body {
     flex-shrink: 0;
 }
 
-/* =========================================================
-   FULL-WIDTH STAT CARDS (Dashboard)
-   Append this to AdminDashboard.css
-   ========================================================= */
+/* FULL-WIDTH STAT CARDS (Dashboard)*/
 
 .stats-grid-full {
     display: grid;
@@ -1124,9 +1083,7 @@ body {
     }
 }
 
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
+/* RESPONSIVE */
 @media (max-width: 900px) {
     .sidebar { position: relative; width: 100%; height: auto; }
     .main-content { margin-left: 0; }

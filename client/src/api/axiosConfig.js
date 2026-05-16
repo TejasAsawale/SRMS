@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-    baseURL: 'http://localhost:5003/api', // Must be 5003 to match your server
+    baseURL: 'http://localhost:5003/api', // port on 5003 
 });
 
 export default API;

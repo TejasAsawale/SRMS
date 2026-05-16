@@ -4,11 +4,11 @@ const classSchema = new mongoose.Schema({
     ClassName: {
         type: String,
         required: true,
-        unique: true, // Prevents "Class 1" and "class 1" from being separate
+        unique: true, 
         trim: true
     },
     Section: {
-        type: String, // Optional: e.g., 'A', 'B', or 'Science'
+        type: String, 
         default: ''
     },
     CreationDate: {

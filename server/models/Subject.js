@@ -1,27 +1,3 @@
-// const mongoose = require("mongoose");
-
-// const subjectSchema = new mongoose.Schema(
-//     {
-//         SubjectName: {
-//             type: String,
-//             required: true,
-//             trim: true,
-//         },
-//         SubjectCode: {
-//             type: String,
-//             required: true,
-//             unique: true, // Like 'MATH101'
-//             trim: true,
-//         }
-//     },
-//     {
-//         // Maps to your original SQL timing fields
-//         timestamps: { createdAt: "CreationDate", updatedAt: "UpdationDate" },
-//     }
-// );
-
-// module.exports = mongoose.model("Subject", subjectSchema, "subjects");
-
 const mongoose = require("mongoose");
 
 const subjectSchema = new mongoose.Schema(

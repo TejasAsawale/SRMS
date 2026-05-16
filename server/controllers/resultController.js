@@ -1,6 +1,6 @@
 const Result = require('../models/Result');
 
-// 1. Add/Declare Result
+// Add/Declare Result
 const addResult = async (req, res) => {
     try {
         const { RollId, SubjectCode, Marks } = req.body;
@@ -18,7 +18,7 @@ const addResult = async (req, res) => {
         const newResult = new Result({ 
             RollId, 
             SubjectCode, 
-            Marks: Number(Marks) // Ensure it's stored as a number
+            Marks: Number(Marks)
         });
         
         await newResult.save();
@@ -28,7 +28,7 @@ const addResult = async (req, res) => {
     }
 };
 
-// 2. Get All Results (For Admin Table)
+// Get All Results (For Admin Table)
 const getAllResults = async (req, res) => {
     try {
         // .lean() makes the query faster if you're just displaying data
@@ -40,11 +40,11 @@ const getAllResults = async (req, res) => {
     }
 };
 
-// 3. Update Result
+// Update Result
 const updateResult = async (req, res) => {
     try {
         const { id } = req.params;
-        const { Marks } = req.body; // Only destructure what you want to allow changing
+        const { Marks } = req.body; 
 
         if (Marks === undefined || Marks < 0 || Marks > 100) {
             return res.status(400).json({ success: false, message: "Invalid Marks value" });
@@ -66,7 +66,7 @@ const updateResult = async (req, res) => {
     }
 };
 
-// 4. Delete Result
+// Delete Result
 const deleteResult = async (req, res) => {
     try {
         const deleted = await Result.findByIdAndDelete(req.params.id);

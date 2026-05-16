@@ -1,6 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap");
 
-/* --- Reset & Base ---------------------------------------- */
 *,
 *::before,
 *::after {
@@ -13,7 +12,7 @@
     --font-sans: "DM Sans", system-ui, sans-serif;
     --font-mono: "DM Mono", monospace;
 
-    /* Sidebar - Dark Navy (Matches Professional Login) */
+    /* Sidebar */
     --sidebar-bg: #1a1a2e; 
     --sidebar-hover: rgba(255, 255, 255, 0.06);
     --sidebar-active: rgba(232, 93, 10, 0.12);
@@ -60,18 +59,14 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* =========================================================
-   LAYOUT STRUCTURE
-   ========================================================= */
+/* LAYOUT STRUCTURE */
 .admin-layout {
     display: flex;
     min-height: 100vh;
-    overflow-x: hidden; /* Prevents horizontal scroll */
+    overflow-x: hidden; 
 }
 
-/* =========================================================
-   SIDEBAR (FIXED LEFT)
-   ========================================================= */
+/* SIDEBAR */
 .sidebar {
     width: var(--sidebar-width);
     background: var(--sidebar-bg);
@@ -81,7 +76,7 @@ body {
     height: 100vh;
     left: 0;
     top: 0;
-    z-index: 1100; /* Higher than navbar */
+    z-index: 1100; 
     box-shadow: 4px 0 10px rgba(0,0,0,0.1);
 }
 
@@ -174,9 +169,7 @@ body {
     background: rgba(232, 93, 10, 0.1);
 }
 
-/* =========================================================
-   MAIN CONTENT AREA
-   ========================================================= */
+/* MAIN CONTENT AREA */
 .main-content {
     flex: 1;
     margin-left: var(--sidebar-width);
@@ -186,9 +179,7 @@ body {
     background: var(--main-bg);
 }
 
-/* =========================================================
-   TOP NAVBAR (FIXED POSITION FIX)
-   ========================================================= */
+/* TOP NAVBAR */
 .top-navbar {
     height: 70px;
     background: var(--surface);
@@ -198,7 +189,6 @@ body {
     justify-content: space-between;
     padding: 0 32px;
     
-    /* Using 'fixed' for maximum reliability if 'sticky' is failing */
     position: fixed;
     top: 0;
     right: 0;
@@ -263,12 +253,10 @@ body {
     box-shadow: 0 0 0 1px var(--border);
 }
 
-/* =========================================================
-   DASHBOARD CONTENT GRID
-   ========================================================= */
+/* DASHBOARD CONTENT GRID */
 .dashboard-content {
     padding: 30px;
-    margin-top: 70px; /* Offset for fixed navbar */
+    margin-top: 70px; 
 }
 
 /* STAT CARDS */
@@ -374,9 +362,7 @@ body {
 .pill-success { background: #dcfce7; color: #15803d; }
 .pill-danger { background: #fee2e2; color: #b91c1c; }
 
-/* =========================================================
-   HELP / FAQ SECTION
-   ========================================================= */
+/* HELP / FAQ SECTION */
 .faq-list {
     padding: 16px 20px;
     display: flex;
@@ -474,9 +460,7 @@ body {
     padding-top: 4px;
 }
 
-/* =========================================================
-   RESPONSIVE DESIGN
-   ========================================================= */
+/* RESPONSIVE DESIGN */
 @media (max-width: 1024px) {
     .sidebar { width: 80px; }
     .sidebar-brand-name, .menu-text, .section-label { display: none; }

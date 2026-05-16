@@ -1,12 +1,3 @@
-// const express = require('express');
-// const router = express.Router();
-// const { addSubject, getAllSubjects } = require('../controllers/subjectController');
-
-// router.post('/add', addSubject);
-// router.get('/all', getAllSubjects);
-
-// module.exports = router;
-
 const express = require('express');
 const router = express.Router();
 const { 
@@ -17,6 +8,7 @@ const {
     deleteSubject 
 } = require('../controllers/subjectController');
 
+// Routes
 router.post('/add', addSubject);
 router.get('/all', getAllSubjects);
 router.get('/class/:classId', getSubjectsByClass);

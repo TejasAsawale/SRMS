@@ -20,22 +20,21 @@ const studentSchema = new mongoose.Schema(
         },
         Gender: {
             type: String,
-            required: true, // Required as per registration form
+            required: true, 
             default: "Select",
         },
         DOB: {
-            type: String, // Storing as string to match your MM/DD/YYYY format
+            type: String, // MM/DD/YYYY format
             required: true,
         },
         ClassId: {
-            type: String, // Maps to "Class / Department" in your form
+            type: String, 
             required: true,
             trim: true,
         },
         RollId: {
             type: String,
             unique: true,
-            // Automatic Generation Logic
             default: function () {
                 const year = new Date().getFullYear();
                 const random = Math.floor(1000 + Math.random() * 9000);
@@ -52,7 +51,6 @@ const studentSchema = new mongoose.Schema(
         },
     },
     {
-        // Customizing timestamp names to match your legacy SRMS requirements
         timestamps: { createdAt: "RegDate", updatedAt: "UpdationDate" },
     },
 );

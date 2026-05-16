@@ -1,39 +1,6 @@
-// const Subject = require('../models/Subject');
-
-// // Add a new Subject
-// const addSubject = async (req, res) => {
-//     try {
-//         const { SubjectName, SubjectCode } = req.body;
-//         // check if already exists or not for prevent data duplication.
-//         const subjectExists = await Subject.findOne({ SubjectCode });
-//         if (subjectExists) {
-//             return res.status(400).json({ message: "Subject Code already exists" });
-//         }
-
-//         const newSubject = new Subject({ SubjectName, SubjectCode });
-//         const savedSubject = await newSubject.save();
-
-//         res.status(201).json({ message: "Subject added successfully", data: savedSubject });
-//     } catch (error) {
-//         res.status(500).json({ message: "Server Error", error: error.message });
-//     }
-// };
-
-// // Get all Subjects
-// const getAllSubjects = async (req, res) => {
-//     try {
-//         const subjects = await Subject.find();
-//         res.status(200).json(subjects);
-//     } catch (error) {
-//         res.status(500).json({ message: "Error fetching subjects", error: error.message });
-//     }
-// };
-
-// module.exports = { addSubject, getAllSubjects };
-
 const Subject = require('../models/Subject');
 
-// 1. Add Subject
+// Add Subject
 const addSubject = async (req, res) => {
     try {
         const { SubjectName, SubjectCode, ClassId } = req.body;
@@ -56,7 +23,7 @@ const addSubject = async (req, res) => {
     }
 };
 
-// 2. Get All Subjects
+// Get All Subjects
 const getAllSubjects = async (req, res) => {
     try {
         const subjects = await Subject.find().sort({ ClassId: 1 });
@@ -66,7 +33,7 @@ const getAllSubjects = async (req, res) => {
     }
 };
 
-// 3. Get Subjects by Class
+// Get Subjects by Class
 const getSubjectsByClass = async (req, res) => {
     try {
         const { classId } = req.params;
@@ -77,7 +44,7 @@ const getSubjectsByClass = async (req, res) => {
     }
 };
 
-// 4. Update Subject
+// Update Subject
 const updateSubject = async (req, res) => {
     try {
         const { id } = req.params;
@@ -103,7 +70,7 @@ const updateSubject = async (req, res) => {
     }
 };
 
-// 5. Delete Subject
+// Delete Subject
 const deleteSubject = async (req, res) => {
     try {
         const deleted = await Subject.findByIdAndDelete(req.params.id);

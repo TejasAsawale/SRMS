@@ -9,24 +9,14 @@ const { addStudent,
         getStudentByEmail
     } = require('../controllers/studentController');
 
-// POST /api/students/addStudent (Signup)
+
+// Routes
 router.post('/addStudent', addStudent); 
-
-// POST /api/students/login (Login)
 router.post('/login', loginStudent); 
-
-// GET /api/students/get (Get All Students)
 router.get('/get', getStudents);  
-
-// NEW: Update route (requires ID as a parameter)
 router.put('/update/:id', updateStudent);  
-
-// NEW: Delete route (requires ID as a parameter)
 router.delete('/delete/:id', deleteStudent); 
-
 router.put('/updateSubjects/:id', updateSubjects);
-
 router.get('/byEmail/:email', getStudentByEmail);
-
 
 module.exports = router;

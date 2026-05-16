@@ -1,8 +1,6 @@
 const Class = require("../models/Class");
 const Result = require("../models/Result");
 
-// @desc    Get all classes for dropdowns (simple list)
-// @route   GET /api/classes/get
 exports.getClasses = async (req, res) => {
     try {
         const classes = await Class.find().sort({ ClassName: 1 });
@@ -15,8 +13,6 @@ exports.getClasses = async (req, res) => {
     }
 };
 
-// @desc    Add a new class manually
-// @route   POST /api/classes/add
 exports.addClass = async (req, res) => {
     try {
         const { ClassName, Section } = req.body;
@@ -43,12 +39,10 @@ exports.addClass = async (req, res) => {
     }
 };
 
-// @desc    Get classes with counts of unique student results for Dashboard Cards
-// @route   GET /api/classes/with-counts
 exports.getClassesWithCounts = async (req, res) => {
     try {
         const classes = await Class.find().sort({ ClassName: 1 });
-        const Result = require("../models/Result"); // Ensure path is correct
+        const Result = require("../models/Result");
 
         // For each class, find how many results are declared
         const classDataWithCounts = await Promise.all(classes.map(async (cls) => {

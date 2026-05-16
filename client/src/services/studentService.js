@@ -1,12 +1,12 @@
 import axios from 'axios';
 
 const API = axios.create({
-    baseURL: 'http://localhost:5000/api' // Ensure this matches your server port
+    baseURL: 'http://localhost:5000/api' 
 });
 
 export const getAllStudents = async () => {
     const response = await API.get('/students');
-    return response.data; // This returns the students array from your controller
+    return response.data; 
 };
 
 export const createStudent = async (studentData) => {

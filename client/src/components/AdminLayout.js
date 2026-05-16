@@ -4,8 +4,6 @@ import '../../style/AdminDashboard.css';
 
 const AdminLayout = ({ logout, userEmail }) => {
     const location = useLocation();
-
-    // Utility to highlight the active link
     const isActive = (path) => location.pathname === path ? 'active' : '';
 
     return (
